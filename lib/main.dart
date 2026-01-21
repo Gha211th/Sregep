@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sregep_productivity_app/ui/splash/splash_screen.dart';
 import 'core/constants.dart';
 import 'providers/timer_provider.dart';
-import 'ui/dashboard/dashboard_screen.dart';
 
 void main() {
   runApp(
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.background,
         primaryColor: AppColors.primary,
       ),
-      home: const DashboardScreen(),
+      home: const SplashScreen(),
     );
   }
 }
