@@ -1,53 +1,38 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../../providers/timer_provider.dart';
 
-class TimerCircle with ChangeNotifier {
-  Timer? _timer;
-  int _remainingSeconds = 1500;
-  bool _isRunning = false;
-  String _selectedSubject = 'MTK';
+class TimerCircle extends StatelessWidget {
+  const TimerCircle({super.key});
 
-  int get remainingSeconds => _remainingSeconds;
-  bool get isRunning => _isRunning;
-  String get selectedSubject => _selectedSubject;
-  double get progress => _remainingSeconds / 1500;
+  @override
+  Widget build(BuildContext context) {
+    final timerProvider = Provider.of<TimerProvider>(context);
 
-  String get timeString {
-    int minutes = _remainingSeconds ~/ 60;
-    int seconds = _remainingSeconds % 60;
-    return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-  }
-
-  void selectSubject(String subject) {
-    if (!_isRunning) {
-      _selectedSubject = subject;
-      notifyListeners();
-    }
-  }
-
-  void startTimer() {
-    if (!_isRunning) {
-      _isRunning = true;
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (_remainingSeconds > 0) {
-          _remainingSeconds--;
-          notifyListeners();
-        } else {
-          stopTimer();
-        }
-      });
-    }
-  }
-
-  void stopTimer() {
-    _timer?.cancel();
-    _isRunning = false;
-    notifyListeners();
-  }
-
-  void restartTimer() {
-    stopTimer();
-    _remainingSeconds = 1500;
-    notifyListeners();
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          width: 250,
+          height: 250,
+          child: CircularProgressIndicator(
+            value: timerProvider.progress,
+            strokeWidth: 12,
+            backgroundColor: Colors.grey[200],
+            color: const Color(0xFF34A0D3),
+            strokeCap: StrokeCap.round,
+          ),
+        ),
+        Text(
+          timerProvider.timeString,
+          style: GoogleFonts.outfit(
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF34A0D3),
+          ),
+        ),
+      ],
+    );
   }
 }

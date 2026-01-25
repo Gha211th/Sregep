@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
-import '../widgets/timer_circle.dart';
 
 class SubjectPicker extends StatelessWidget {
   const SubjectPicker({super.key});

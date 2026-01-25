@@ -1,59 +1,54 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../data/database_helper.dart';
-import '../data/models/study_session.dart';
-import 'package:intl/intl.dart';
 
 class TimerProvider with ChangeNotifier {
   Timer? _timer;
-  int _secondRemaining = 25 * 60;
+  int _remainingSeconds = 1500;
   bool _isRunning = false;
-  String _selectedSubject = 'Mapel Default';
+  String _selectedSubject = 'MTK';
 
-  int get secondRemaining => _secondRemaining;
+  int get remainingSeconds => _remainingSeconds;
   bool get isRunning => _isRunning;
   String get selectedSubject => _selectedSubject;
+  double get progress => _remainingSeconds / 1500;
 
-  void setSubject(String subject) {
-    _selectedSubject = subject;
-    notifyListeners();
+  String get timeString {
+    int minutes = _remainingSeconds ~/ 60;
+    int seconds = _remainingSeconds % 60;
+    return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+  }
+
+  void selectSubject(String subject) {
+    if (!_isRunning) {
+      _selectedSubject = subject;
+      notifyListeners();
+    }
   }
 
   void startTimer() {
-    if (_isRunning) return;
-    _isRunning = true;
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_secondRemaining > 0) {
-        _secondRemaining--;
-        notifyListeners();
-      } else {
-        stopTimer(isFinished: true);
-      }
-    });
+    if (!_isRunning) {
+      _isRunning = true;
+      notifyListeners(); // Tambahkan ini agar UI tahu timer mulai jalan
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (_remainingSeconds > 0) {
+          _remainingSeconds--;
+          notifyListeners();
+        } else {
+          stopTimer();
+        }
+      });
+    }
   }
 
-  void stopTimer({bool isFinished = false}) {
+  void stopTimer() {
     _timer?.cancel();
     _isRunning = false;
-
-    if (isFinished) {
-      _saveSessionToDatabase();
-      _secondRemaining = 25 * 60;
-    }
     notifyListeners();
   }
 
-  Future<void> _saveSessionToDatabase() async {
-    int durationInMinutes = 25;
-    String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
-    StudySession newSession = StudySession(
-      subject: _selectedSubject,
-      duration: durationInMinutes,
-      date: today,
-    );
-
-    await DatabaseHelper.instance.insertSession(newSession);
-    print("Sesi Belajar $_selectedSubject berhasil disimpan!");
+  void restartTimer() {
+    stopTimer();
+    _remainingSeconds = 1500;
+    notifyListeners();
   }
 }
