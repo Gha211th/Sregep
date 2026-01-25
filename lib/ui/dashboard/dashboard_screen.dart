@@ -28,6 +28,7 @@ class DashboardScreen extends StatelessWidget {
                   height: 1,
                 ),
               ),
+              Text("hello world"),
               Text(
                 "Ready to be productive?",
                 style: GoogleFonts.outfit(
