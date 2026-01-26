@@ -6,11 +6,13 @@ class TimerProvider with ChangeNotifier {
   int _remainingSeconds = 1500;
   bool _isRunning = false;
   String _selectedSubject = 'MTK';
+  int _currentSeconds = 0;
 
   int get remainingSeconds => _remainingSeconds;
   bool get isRunning => _isRunning;
   String get selectedSubject => _selectedSubject;
   double get progress => _remainingSeconds / 1500;
+  int get currentSeconds => _currentSeconds;
 
   String get timeString {
     int minutes = _remainingSeconds ~/ 60;
@@ -28,10 +30,11 @@ class TimerProvider with ChangeNotifier {
   void startTimer() {
     if (!_isRunning) {
       _isRunning = true;
-      notifyListeners(); // Tambahkan ini agar UI tahu timer mulai jalan
+      notifyListeners();
       _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (_remainingSeconds > 0) {
           _remainingSeconds--;
+          _currentSeconds++;
           notifyListeners();
         } else {
           stopTimer();

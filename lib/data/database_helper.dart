@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../data/models/study_session.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -10,7 +9,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('study_focus.db');
+    _database = await _initDB('sregep_productivity.db');
     return _database!;
   }
 
@@ -21,9 +20,9 @@ class DatabaseHelper {
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
-  Future _createDB(Database db, int vesion) async {
+  Future _createDB(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE session (
+      CREATE TABLE study_records (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         subject TEXT NOT NULL,
         duration INTEGER NOT NULL,
@@ -32,15 +31,13 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<int> insertSession(StudySession session) async {
-    final db = await instance.database;
-    return await db.insert('session', session.toMap());
+  Future<int> insertStudyRecord(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    return await db.insert('study_records', row);
   }
 
-  Future<List<StudySession>> getAllSession() async {
-    final db = await instance.database;
-    final result = await db.query('session', orderBy: 'date DESC');
-
-    return result.map((json) => StudySession.fromMap(json)).toList();
+  Future<List<Map<String, dynamic>>> queryAllRows() async {
+    Database db = await instance.database;
+    return await db.query('study_records', orderBy: 'date DESC');
   }
 }
