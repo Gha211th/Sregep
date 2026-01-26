@@ -6,6 +6,7 @@ import 'widgets/timer_circle.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
 
 class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
@@ -28,7 +29,6 @@ class DashboardScreen extends StatelessWidget {
                   height: 1,
                 ),
               ),
-              Text("hello world"),
               Text(
                 "Ready to be productive?",
                 style: GoogleFonts.outfit(
@@ -57,23 +57,31 @@ class DashboardScreen extends StatelessWidget {
           onPressed: provider.isRunning ? null : () => provider.startTimer(),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF34A0D3),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadiusGeometry.circular(10),
             ),
           ),
           child: Text("Start", style: GoogleFonts.outfit(fontSize: 14)),
         ),
+        SizedBox(width: 20),
         OutlinedButton(
           onPressed: !provider.isRunning ? null : () => provider.stopTimer(),
           style: OutlinedButton.styleFrom(
             backgroundColor: const Color(0xFF34A0D3),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadiusGeometry.circular(10),
             ),
           ),
-          child: Text("Stop", style: GoogleFonts.outfit(fontSize: 14)),
+          child: Text(
+            "Stop",
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
       ],
     );
