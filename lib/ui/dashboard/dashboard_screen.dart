@@ -62,9 +62,6 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildControlButtons(TimerProvider provider, BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double scale = screenWidth / 400; // Skala standar mobile
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
