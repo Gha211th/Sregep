@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sregep_productivity_app/ui/dashboard/widgets/widget_navbar.dart';
 import 'dart:async';
 import '../dashboard/dashboard_screen.dart';
 
@@ -15,9 +16,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const MainNavigation()),
       );
     });
   }
@@ -61,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: Color(0xFFFFFFFF),
                     fontSize: 11,
                     fontWeight: FontWeight.w300,
-                    letterSpacing: sqrt1_2,
+                    letterSpacing: 2,
                   ),
                 ),
               ),

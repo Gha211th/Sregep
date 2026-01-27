@@ -84,7 +84,7 @@ class StatsScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: BarChart(BarChartData(
-            maxY: maxVal,
+            maxY: 100,
             barGroups: List.generate(7, (i) => _makeBarGroup(i, data[i])),
             titlesData: _buildChartTitles(),
             gridData: const FlGridData(show: false),
