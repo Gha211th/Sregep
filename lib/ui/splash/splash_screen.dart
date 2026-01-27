@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sregep_productivity_app/ui/statistics/stats_screen.dart';
 import 'dart:async';
 import '../dashboard/dashboard_screen.dart';
 
@@ -20,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => StatsScreen()),
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
       );
     });
   }
