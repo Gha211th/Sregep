@@ -6,7 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 
 class StatsScreen extends StatelessWidget {
-  const StatsScreen({super.key});
+  const  StatsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +111,7 @@ class StatsScreen extends StatelessWidget {
             }).toList(),
         );
       }
-    )
+    );
   }
 
   BarChartGroupData _makeBarGroup(int x, double y) {
@@ -124,7 +124,8 @@ class StatsScreen extends StatelessWidget {
           width: 14,
           borderRadius: BorderRadius.circular(10),
         )
-    )
+      ]
+    );
   }
 
   FlTitlesData _buildChartTitles() {
@@ -168,7 +169,6 @@ class StatsScreen extends StatelessWidget {
           Text("""This week's subject percentage""", style: GoogleFonts.outfit(color: Colors.grey, fontSize: 12)),
           const SizedBox(height: 12),
           ClipRect(
-            borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 10,
@@ -190,5 +190,5 @@ class StatsScreen extends StatelessWidget {
         ],
       ),
     );
-  }_
+  }
 }
