@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:path/path.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/ui/dashboard/dashboard_screen.dart';
 import 'package:sregep_productivity_app/ui/statistics/stats_screen.dart';
@@ -15,6 +12,7 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
+  final PageController _pageController = PageController();
 
   final List<Widget> _screen = [
     const DashboardScreen(),
@@ -22,15 +20,32 @@ class _MainNavigationState extends State<MainNavigation> {
   ];
 
   @override
-  Widget build(BuildContext Context) {
+    void dispose() {
+      _pageController.dispose();
+      super.dispose();
+    }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: _screen[_selectedIndex],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;            
+          });
+        },
+        children: _screen,
+      ),
+      
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
         },
         selectedItemColor: AppColors.accent,
         unselectedItemColor: Colors.black,

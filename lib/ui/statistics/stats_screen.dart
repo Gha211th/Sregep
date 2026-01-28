@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:path/path.dart';
 import 'package:sregep_productivity_app/data/database_helper.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
@@ -26,7 +25,7 @@ class StatsScreen extends StatelessWidget {
               const Divider(thickness: 1),
               const SizedBox(height: 20),
 
-              _buildSectionTitle('Focus Statistic This Week', 'Have you reached your goals'),
+              _buildSectionTitle('Focus Statistic This Week', 'Have you reached your goals?'),
               const SizedBox(height: 15),
 
               _buildChartScetion(),
@@ -68,32 +67,55 @@ class StatsScreen extends StatelessWidget {
   }
 
   Widget _buildChartScetion() {
-    return FutureBuilder<List<double>>(
-      future: DatabaseHelper.instance.getDailyStats(),
-      builder: (context, snapshot) {
-        List<double> data = snapshot.data ?? List.filled(7, 0.0);
-        double maxVal = data.isEmpty ? 100 : data.reduce((a, b) => a > b ? a : b);
+  return FutureBuilder<List<double>>(
+    future: DatabaseHelper.instance.getDailyStats(),
+    builder: (context, snapshot) {
+      List<double> data = snapshot.data ?? List.filled(7, 0.0);
+      List<double> charData = data.map((seconds) {
+        double minutes = seconds / 60;
+        return minutes > 125 ? 125.0 : minutes;
+      }).toList();
 
-        if (maxVal ==  0) maxVal = 100;
-        
-        return Container(
-          height: 250,
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.accent, width: 1.5),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: BarChart(BarChartData(
-            maxY: 100,
-            barGroups: List.generate(7, (i) => _makeBarGroup(i, data[i])),
+      return Container(
+        height: 250,
+        padding: const EdgeInsets.fromLTRB(10, 20, 15, 10),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.accent, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: BarChart(
+          BarChartData(
+            maxY: 125, 
+            minY: 0,
+            barGroups: List.generate(7, (i) => _makeBarGroup(i, charData[i])),
             titlesData: _buildChartTitles(),
-            gridData: const FlGridData(show: false),
+            barTouchData: BarTouchData(
+              touchTooltipData: BarTouchTooltipData(
+                getTooltipColor: (group) => AppColors.accent,
+                getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                  return BarTooltipItem(
+                    "${rod.toY.toStringAsFixed(1)} m",
+                    GoogleFonts.outfit(color: Colors.white, fontSize: 12),
+                  );
+                },
+              ),
+            ),
+            gridData: FlGridData(
+              show: true,
+              drawVerticalLine: false,
+              horizontalInterval: 25, 
+              getDrawingHorizontalLine: (value) => FlLine(
+                color: Colors.grey.withOpacity(0.2),
+                strokeWidth: 1,
+              ),
+            ),
             borderData: FlBorderData(show: false),
-          )),
-        );
-      }
-    );
-  }
+          ),
+        ),
+      );
+    }
+  );
+}
 
   Widget _buildSubjectProgressList() {
     return FutureBuilder(future: DatabaseHelper.instance.getSubjectStats(), builder: (context, snapshot){
@@ -146,7 +168,8 @@ class StatsScreen extends StatelessWidget {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 35,
-          getTitlesWidget: (v, m) => Text("${v.toInt()}", style: GoogleFonts.outfit(fontSize: 10),)
+          interval: 25,
+          getTitlesWidget: (v, m) => Text("${v.toInt()}Min", style: GoogleFonts.outfit(fontSize: 10),)
         )
       ),
       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -186,7 +209,7 @@ class StatsScreen extends StatelessWidget {
       child: Column(
         children: [
           Text("More Details", style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.accent)),
-          Text('Focus detail this week', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.grey))
+          Text('Focus detail this week', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.grey))
         ],
       ),
     );
