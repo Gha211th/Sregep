@@ -19,7 +19,7 @@ class StatsScreen extends StatelessWidget {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 30),
+              SizedBox(height: screenSize.height * 0.08),
               _buildHeader(),
               const SizedBox(height: 10),
               const Divider(thickness: 1),
