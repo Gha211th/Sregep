@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/data/database_helper.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
+import 'dart:math';
 
 class StatsScreen extends StatelessWidget {
   const  StatsScreen({super.key});
@@ -71,10 +72,10 @@ class StatsScreen extends StatelessWidget {
     future: DatabaseHelper.instance.getDailyStats(),
     builder: (context, snapshot) {
       List<double> data = snapshot.data ?? List.filled(7, 0.0);
-      List<double> charData = data.map((seconds) {
-        double minutes = seconds / 60;
-        return minutes > 125 ? 125.0 : minutes;
-      }).toList();
+      List<double> charData = data.map((seconds) => seconds / 60).toList();
+      double maxData = charData.isEmpty ? 0 : charData.reduce(max);
+      double calculateMaxY = maxData == 0 ? 10 : maxData + (maxData * 0.2);
+      double dynamicInterval = (calculateMaxY / 5).clamp(1.0, double.infinity);
 
       return Container(
         height: 250,
@@ -85,7 +86,7 @@ class StatsScreen extends StatelessWidget {
         ),
         child: BarChart(
           BarChartData(
-            maxY: 125, 
+            maxY: calculateMaxY, 
             minY: 0,
             barGroups: List.generate(7, (i) => _makeBarGroup(i, charData[i])),
             titlesData: _buildChartTitles(),
@@ -103,7 +104,7 @@ class StatsScreen extends StatelessWidget {
             gridData: FlGridData(
               show: true,
               drawVerticalLine: false,
-              horizontalInterval: 25, 
+              horizontalInterval: dynamicInterval, 
               getDrawingHorizontalLine: (value) => FlLine(
                 color: Colors.grey.withOpacity(0.2),
                 strokeWidth: 1,

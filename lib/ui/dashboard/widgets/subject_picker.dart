@@ -9,17 +9,66 @@ class SubjectPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final screenHeight = size.height;
+    final screenWidth = size.width;
+
     final timerProvider = Provider.of<TimerProvider>(context);
-    final subjects = ['MTK', 'IPA', 'IPS', 'Bhs.Indonesia', 'Bhs.Inggris'];
+    final List<String> subjects = ['MTK', 'IPA', 'IPS', 'Bhs.Indo', 'Bhs.Eng'];
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Column(
-          children: [
-            Text("Select The Mapel To Focus", style: GoogleFonts.outfit(fontSize: 13, color: AppColors.accent),),
-          ],
+        Text("Select Mapel To Focus",
+         style: GoogleFonts.outfit(
+          fontSize: 13,
+          fontWeight: FontWeight.w500, 
+          color: AppColors.accent
+          )
+        ),
+        Text("What you wanna learn?",
+          style: GoogleFonts.outfit(
+            fontSize: 10,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFFB3B3B3)
+          ),
+        ),
+        SizedBox(height: screenHeight * 0.02),
+        Container(
+          height: 40,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: AppColors.accent,
+              width: 1
+            )
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              value: subjects.contains(timerProvider.selectedSubject)
+                ? timerProvider.selectedSubject
+                : subjects[0],
+              isExpanded: true,
+              menuMaxHeight: 250,
+              dropdownColor: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: subjects.map((String subject) {
+                return DropdownMenuItem<String>(
+                  value: subject,
+                  child: Text("Mapel: $subject"),
+                );
+              }).toList(), 
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  timerProvider.selectSubject(newValue);
+                }
+              }
+          )),
         )
       ],
     );
-    }
+  }
 }

@@ -17,10 +17,11 @@ class DashboardScreen extends StatelessWidget {
       backgroundColor: Color(0xFFF8F9FA),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
+          physics: const BouncingScrollPhysics(),
+          child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: screenWidth.height * 0.08),
                 Text(
