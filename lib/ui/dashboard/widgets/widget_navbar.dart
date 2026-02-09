@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/ui/dashboard/dashboard_screen.dart';
 import 'package:sregep_productivity_app/ui/statistics/stats_screen.dart';
@@ -14,53 +15,86 @@ class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
 
-  final List<Widget> _screen = [
+  final List<Widget> _screens = [
     const DashboardScreen(),
     const StatsScreen(),
+    const Center(child: Text("TODO LIST PAGE")),
+    const Center(child: Text("NOTE STUDENT PAGE *idk about this one")),
   ];
 
   @override
-    void dispose() {
-      _pageController.dispose();
-      super.dispose();
-    }
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: PageView(
         controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;            
-          });
-        },
-        children: _screen,
+        onPageChanged: (index) => setState(() => _selectedIndex = index),
+        children: _screens,
       ),
+      bottomNavigationBar: _buildCustomNavbar(),
+    );
+  }
       
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        },
-        selectedItemColor: AppColors.accent,
-        unselectedItemColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Stats'
-          )
+  Widget _buildCustomNavbar() {
+    return Container(
+      height: 80,
+      padding: const EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.accent
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _navItem(0, Icons.home_filled, "Home"),
+          _navItem(1, Icons.stacked_bar_chart_rounded, "Stats"),
+          _navItem(2, Icons.checklist_rtl_rounded, "Todos"),
+          _navItem(3, Icons.edit_note_rounded, "Note")
         ],
       ),
     );
   }
-  
+
+  Widget _navItem(int index, IconData icon, String label) {
+    bool isActive = _selectedIndex == index;
+
+    return GestureDetector(
+      onTap: () {
+        _pageController.animateToPage(index, 
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      },
+      child: AnimatedContainer(duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        width: 70,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(duration: Duration(milliseconds: 300),
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: isActive ? Colors.white : Colors.transparent,
+                shape: BoxShape.circle
+              ),
+              child: Icon(
+                icon,
+                color: isActive ? AppColors.accent : Colors.white,
+                size: 16,
+              ),
+            ),
+            const SizedBox(height: 0),
+            Text(label,
+              style: GoogleFonts.outfit(fontSize: 10, color: Colors.white, fontWeight: isActive ? FontWeight.w500 : FontWeight.w400),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }

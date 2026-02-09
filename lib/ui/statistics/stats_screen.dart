@@ -197,6 +197,7 @@ class StatsScreen extends StatelessWidget {
               value: progress,
               minHeight: 10,
               backgroundColor: Colors.blue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
               valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accent),
             ),
           )

@@ -52,6 +52,7 @@ class TimerProvider with ChangeNotifier {
   void restartTimer() {
     _isRunning = false;
     _currentSeconds = 0;
+    _remainingSeconds = 1500;
     notifyListeners();  
   }
 }

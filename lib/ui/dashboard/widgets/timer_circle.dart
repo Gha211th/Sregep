@@ -19,10 +19,10 @@ class TimerCircle extends StatelessWidget {
 
         return Column(
           children: [
-            SizedBox(height: screenWidth.height * 0.07),
+            SizedBox(height: screenWidth.height * 0.05),
             Container(
-              width: diameter + 30,
-              height: diameter + 30,
+              width: diameter + 5,
+              height: diameter + 5,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,

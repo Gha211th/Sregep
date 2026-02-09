@@ -41,7 +41,7 @@ class DashboardScreen extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                SizedBox(height: screenWidth.height * 0.05),
+                SizedBox(height: screenWidth.height * 0.03),
                 SubjectPicker(),
                 Center(
                   child: Padding(
@@ -49,7 +49,7 @@ class DashboardScreen extends StatelessWidget {
                     child: TimerCircle(),
                   ),
                 ),
-                SizedBox(height: screenWidth.height * 0.08),
+                SizedBox(height: screenWidth.height * 0.05),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: _buildControlButtons(timerProvider, context),
