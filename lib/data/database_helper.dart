@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
- static Database? _database;
+  static Database? _database;
 
   DatabaseHelper._init();
 
@@ -29,6 +29,40 @@ class DatabaseHelper {
         date TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE todos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        task TEXT NOT NULL,
+        date TEXT NOT NULL,
+        is_completed INTEGER NOT NULL DEFAULT 0
+      )
+    ''');
+  }
+
+  Future<int> insertTodo(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    return await db.insert("todos", row);
+  }
+
+  Future<List<Map<String, dynamic>>> queryTodos(bool isCompleted) async {
+    Database db = await instance.database;
+    return await db.query(
+      "todos",
+      where: 'is_completed = ?',
+      whereArgs: [isCompleted ? 1 : 0],
+      orderBy: 'date ASC',
+    );
+  }
+
+  Future<int> updateTodoStatus(int id, bool isCompleted) async {
+    Database db = await instance.database;
+    return await db.update(
+      'todos',
+      {'is_completed': isCompleted ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> insertStudyRecord(Map<String, dynamic> row) async {

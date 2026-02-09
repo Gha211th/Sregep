@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/ui/dashboard/dashboard_screen.dart';
 import 'package:sregep_productivity_app/ui/statistics/stats_screen.dart';
+import 'package:sregep_productivity_app/ui/todo_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -18,7 +19,7 @@ class _MainNavigationState extends State<MainNavigation> {
   final List<Widget> _screens = [
     const DashboardScreen(),
     const StatsScreen(),
-    const Center(child: Text("TODO LIST PAGE")),
+    const TodoScreen(),
     const Center(child: Text("NOTE STUDENT PAGE *idk about this one")),
   ];
 
@@ -40,21 +41,19 @@ class _MainNavigationState extends State<MainNavigation> {
       bottomNavigationBar: _buildCustomNavbar(),
     );
   }
-      
+
   Widget _buildCustomNavbar() {
     return Container(
       height: 80,
       padding: const EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.accent
-      ),
+      decoration: BoxDecoration(color: AppColors.accent),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _navItem(0, Icons.home_filled, "Home"),
           _navItem(1, Icons.stacked_bar_chart_rounded, "Stats"),
           _navItem(2, Icons.checklist_rtl_rounded, "Todos"),
-          _navItem(3, Icons.edit_note_rounded, "Note")
+          _navItem(3, Icons.edit_note_rounded, "Note"),
         ],
       ),
     );
@@ -65,22 +64,25 @@ class _MainNavigationState extends State<MainNavigation> {
 
     return GestureDetector(
       onTap: () {
-        _pageController.animateToPage(index, 
+        _pageController.animateToPage(
+          index,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       },
-      child: AnimatedContainer(duration: const Duration(milliseconds: 300),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         width: 70,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedContainer(duration: Duration(milliseconds: 300),
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: isActive ? Colors.white : Colors.transparent,
-                shape: BoxShape.circle
+                shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
@@ -89,9 +91,14 @@ class _MainNavigationState extends State<MainNavigation> {
               ),
             ),
             const SizedBox(height: 0),
-            Text(label,
-              style: GoogleFonts.outfit(fontSize: 10, color: Colors.white, fontWeight: isActive ? FontWeight.w500 : FontWeight.w400),
-            )
+            Text(
+              label,
+              style: GoogleFonts.outfit(
+                fontSize: 10,
+                color: Colors.white,
+                fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
+              ),
+            ),
           ],
         ),
       ),
