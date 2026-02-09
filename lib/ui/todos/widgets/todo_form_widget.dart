@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/data/database_helper.dart';
 
 class TodoFormWidget extends StatefulWidget {
@@ -25,8 +24,9 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
   Future<void> _pickDate() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2025),
-      lastDate: DateTime(2200),
+      lastDate: DateTime(2100),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -42,22 +42,22 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
         _dateController.text = DateFormat('dd/MM/yyyy').format(pickedDate);
       });
     }
+  }
 
-    void _submitData() async {
-      if (_nameController.text.isEmpty || _dateController.text.isEmpty) return;
+  void _submitData() async {
+    if (_nameController.text.isEmpty || _dateController.text.isEmpty) return;
 
-      await DatabaseHelper.instance.insertTodo({
-        'task': _nameController.text,
-        'date': _dateController.text,
-        'is_completed': 0,
-      });
+    await DatabaseHelper.instance.insertTodo({
+      'task': _nameController.text,
+      'date': _dateController.text,
+      'is_completed': 0,
+    });
 
-      _nameController.clear();
-      _dateController.clear();
-      widget.onTodoAdded();
+    _nameController.clear();
+    _dateController.clear();
+    widget.onTodoAdded();
 
-      FocusScope.of(context).unfocus();
-    }
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -66,12 +66,49 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: AppColors.accent, width: 2),
+        border: Border.all(color: widget.primaryColor, width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [_buildLabel('Add Name')],
+        children: [
+          _buildLabel("Add Name"),
+          _buildTextField(
+            controller: _nameController,
+            hint: "Enter your todo name",
+          ),
+          const SizedBox(height: 15),
+          _buildLabel("Add Date"),
+          _buildTextField(
+            controller: _dateController,
+            hint: "dd/mm/yyyy",
+            readOnly: true,
+            onTap: _pickDate,
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: _submitData,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: widget.primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 0,
+              ),
+              child: Text(
+                "Add Todos",
+                style: GoogleFonts.outfit(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -82,7 +119,7 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
       child: Text(
         label,
         style: GoogleFonts.outfit(
-          color: AppColors.accent,
+          color: widget.primaryColor,
           fontWeight: FontWeight.w500,
           fontSize: 16,
         ),
@@ -105,10 +142,19 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
         hintStyle: GoogleFonts.outfit(
           color: Colors.grey.shade400,
           fontSize: 14,
+          fontWeight: FontWeight.w400,
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 10,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(color: widget.primaryColor.withOpacity(0.5)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+          borderSide: BorderSide(color: widget.primaryColor, width: 2),
         ),
       ),
     );

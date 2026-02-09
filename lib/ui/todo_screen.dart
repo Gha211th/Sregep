@@ -44,12 +44,22 @@ class _TodoScreenState extends State<TodoScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: screenSize.height * 0.08),
               _buildHeader(),
               const SizedBox(height: 10),
               const Divider(thickness: 1),
               const SizedBox(height: 20),
+              _buildSectionTitle(
+                'Add your todo~',
+                'Do you have any todo list?',
+              ),
+              const SizedBox(height: 15),
+              TodoFormWidget(
+                onTodoAdded: _loadTodos,
+                primaryColor: AppColors.accent,
+              ),
             ],
           ),
         ),
@@ -59,22 +69,46 @@ class _TodoScreenState extends State<TodoScreen> {
 
   Widget _buildHeader() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Your Todos",
           style: GoogleFonts.outfit(
             color: AppColors.accent,
-            fontSize: 36,
+            fontSize: 42,
             fontWeight: FontWeight.w500,
           ),
         ),
         Text(
           "Schdule your todos",
           style: GoogleFonts.outfit(
+            color: Colors.grey,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSectionTitle(String title, String subtitle) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.outfit(
             color: AppColors.accent,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontSize: 24,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Text(
+          subtitle,
+          style: GoogleFonts.outfit(
+            color: Colors.grey,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],

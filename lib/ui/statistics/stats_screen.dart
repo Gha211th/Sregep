@@ -6,7 +6,7 @@ import 'package:sregep_productivity_app/core/constants.dart';
 import 'dart:math';
 
 class StatsScreen extends StatelessWidget {
-  const  StatsScreen({super.key});
+  const StatsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +15,9 @@ class StatsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.07),
-        child: Column(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.07),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: screenSize.height * 0.08),
@@ -26,7 +26,10 @@ class StatsScreen extends StatelessWidget {
               const Divider(thickness: 1),
               const SizedBox(height: 20),
 
-              _buildSectionTitle('Focus Statistic This Week', 'Have you reached your goals?'),
+              _buildSectionTitle(
+                'Focus Statistic This Week',
+                'Have you reached your goals?',
+              ),
               const SizedBox(height: 15),
 
               _buildChartScetion(),
@@ -38,7 +41,7 @@ class StatsScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               _buildSubjectProgressList(),
-              const SizedBox(height: 30,)
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -50,10 +53,23 @@ class StatsScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Your Stats", style: GoogleFonts.outfit(color: AppColors.accent, fontSize: 36, fontWeight: FontWeight.w500)),
-        Text("Productivity stats this week", style: GoogleFonts.outfit(color: AppColors.accent, fontSize: 16, fontWeight: FontWeight.w500)), 
+        Text(
+          "Your Stats",
+          style: GoogleFonts.outfit(
+            color: AppColors.accent,
+            fontSize: 42,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          "Productivity stats this week",
+          style: GoogleFonts.outfit(
+            color: Colors.grey,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ],
-
     );
   }
 
@@ -61,79 +77,99 @@ class StatsScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: GoogleFonts.outfit(color: AppColors.accent, fontSize: 18, fontWeight: FontWeight.w400)),
-        Text(subtitle, style: GoogleFonts.outfit(color: AppColors.accent, fontSize: 12, fontWeight: FontWeight.w400)),
+        Text(
+          title,
+          style: GoogleFonts.outfit(
+            color: AppColors.accent,
+            fontSize: 24,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Text(
+          subtitle,
+          style: GoogleFonts.outfit(
+            color: AppColors.accent,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildChartScetion() {
-  return FutureBuilder<List<double>>(
-    future: DatabaseHelper.instance.getDailyStats(),
-    builder: (context, snapshot) {
-      List<double> data = snapshot.data ?? List.filled(7, 0.0);
-      List<double> charData = data.map((seconds) => seconds / 60).toList();
-      double maxData = charData.isEmpty ? 0 : charData.reduce(max);
-      double calculateMaxY = maxData == 0 ? 10 : maxData + (maxData * 0.2);
-      double dynamicInterval = (calculateMaxY / 5).clamp(1.0, double.infinity);
+    return FutureBuilder<List<double>>(
+      future: DatabaseHelper.instance.getDailyStats(),
+      builder: (context, snapshot) {
+        List<double> data = snapshot.data ?? List.filled(7, 0.0);
+        List<double> charData = data.map((seconds) => seconds / 60).toList();
+        double maxData = charData.isEmpty ? 0 : charData.reduce(max);
+        double calculateMaxY = maxData == 0 ? 10 : maxData + (maxData * 0.2);
+        double dynamicInterval = (calculateMaxY / 5).clamp(
+          1.0,
+          double.infinity,
+        );
 
-      return Container(
-        height: 250,
-        padding: const EdgeInsets.fromLTRB(10, 20, 15, 10),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.accent, width: 1.5),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: BarChart(
-          BarChartData(
-            maxY: calculateMaxY, 
-            minY: 0,
-            barGroups: List.generate(7, (i) => _makeBarGroup(i, charData[i])),
-            titlesData: _buildChartTitles(),
-            barTouchData: BarTouchData(
-              touchTooltipData: BarTouchTooltipData(
-                getTooltipColor: (group) => AppColors.accent,
-                getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                  return BarTooltipItem(
-                    "${rod.toY.toStringAsFixed(1)} m",
-                    GoogleFonts.outfit(color: Colors.white, fontSize: 12),
-                  );
-                },
-              ),
-            ),
-            gridData: FlGridData(
-              show: true,
-              drawVerticalLine: false,
-              horizontalInterval: dynamicInterval, 
-              getDrawingHorizontalLine: (value) => FlLine(
-                color: Colors.grey.withOpacity(0.2),
-                strokeWidth: 1,
-              ),
-            ),
-            borderData: FlBorderData(show: false),
+        return Container(
+          height: 250,
+          padding: const EdgeInsets.fromLTRB(10, 20, 15, 10),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.accent, width: 1.5),
+            borderRadius: BorderRadius.circular(10),
           ),
-        ),
-      );
-    }
-  );
-}
+          child: BarChart(
+            BarChartData(
+              maxY: calculateMaxY,
+              minY: 0,
+              barGroups: List.generate(7, (i) => _makeBarGroup(i, charData[i])),
+              titlesData: _buildChartTitles(),
+              barTouchData: BarTouchData(
+                touchTooltipData: BarTouchTooltipData(
+                  getTooltipColor: (group) => AppColors.accent,
+                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                    return BarTooltipItem(
+                      "${rod.toY.toStringAsFixed(1)} m",
+                      GoogleFonts.outfit(color: Colors.white, fontSize: 12),
+                    );
+                  },
+                ),
+              ),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                horizontalInterval: dynamicInterval,
+                getDrawingHorizontalLine: (value) =>
+                    FlLine(color: Colors.grey.withOpacity(0.2), strokeWidth: 1),
+              ),
+              borderData: FlBorderData(show: false),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Widget _buildSubjectProgressList() {
-    return FutureBuilder(future: DatabaseHelper.instance.getSubjectStats(), builder: (context, snapshot){
+    return FutureBuilder(
+      future: DatabaseHelper.instance.getSubjectStats(),
+      builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text("No records yet, Start focusing"));
         }
 
         final stats = snapshot.data!;
-        double grandTotal = stats.fold(0, (sum, item) => sum + item['total_duration']);
+        double grandTotal = stats.fold(
+          0,
+          (sum, item) => sum + item['total_duration'],
+        );
 
         return Column(
           children: stats.map((item) {
-              double progress = item['total_duration'] / grandTotal;
-              return _buildSubjectDetailCard(item['subject'], progress);
-            }).toList(),
+            double progress = item['total_duration'] / grandTotal;
+            return _buildSubjectDetailCard(item['subject'], progress);
+          }).toList(),
         );
-      }
+      },
     );
   }
 
@@ -146,8 +182,8 @@ class StatsScreen extends StatelessWidget {
           color: AppColors.accent,
           width: 14,
           borderRadius: BorderRadius.circular(10),
-        )
-      ]
+        ),
+      ],
     );
   }
 
@@ -160,21 +196,25 @@ class StatsScreen extends StatelessWidget {
             const day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
             return Padding(
               padding: const EdgeInsetsGeometry.only(top: 8),
-              child: Text(day[v.toInt()], style: GoogleFonts.outfit(fontSize: 10)),
+              child: Text(
+                day[v.toInt()],
+                style: GoogleFonts.outfit(fontSize: 10),
+              ),
             );
-          }
-        )
+          },
+        ),
       ),
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 35,
           interval: 25,
-          getTitlesWidget: (v, m) => Text("${v.toInt()}Min", style: GoogleFonts.outfit(fontSize: 10),)
-        )
+          getTitlesWidget: (v, m) =>
+              Text("${v.toInt()}Min", style: GoogleFonts.outfit(fontSize: 10)),
+        ),
       ),
       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false))
+      rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
     );
   }
 
@@ -189,8 +229,18 @@ class StatsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w500, color: AppColors.accent)),
-          Text("""This week's subject percentage""", style: GoogleFonts.outfit(color: Colors.grey, fontSize: 12)),
+          Text(
+            title,
+            style: GoogleFonts.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: AppColors.accent,
+            ),
+          ),
+          Text(
+            """This week's subject percentage""",
+            style: GoogleFonts.outfit(color: Colors.grey, fontSize: 12),
+          ),
           const SizedBox(height: 12),
           ClipRect(
             child: LinearProgressIndicator(
@@ -200,7 +250,7 @@ class StatsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accent),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -210,8 +260,22 @@ class StatsScreen extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Text("More Details", style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.accent)),
-          Text('Focus detail this week', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.grey))
+          Text(
+            "More Details",
+            style: GoogleFonts.outfit(
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+              color: AppColors.accent,
+            ),
+          ),
+          Text(
+            'Focus detail this week',
+            style: GoogleFonts.outfit(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey,
+            ),
+          ),
         ],
       ),
     );
