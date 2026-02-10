@@ -17,8 +17,8 @@ class _MainNavigationState extends State<MainNavigation> {
   final PageController _pageController = PageController();
 
   final List<Widget> _screens = [
-    const DashboardScreen(),
     const StatsScreen(),
+    const DashboardScreen(),
     const TodoScreen(),
     const Center(child: Text("NOTE STUDENT PAGE *idk about this one")),
   ];
@@ -50,8 +50,8 @@ class _MainNavigationState extends State<MainNavigation> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _navItem(0, Icons.home_filled, "Home"),
-          _navItem(1, Icons.stacked_bar_chart_rounded, "Stats"),
+          _navItem(0, Icons.stacked_bar_chart, "Stats"),
+          _navItem(1, Icons.timer, "Focus"),
           _navItem(2, Icons.checklist_rtl_rounded, "Todos"),
           _navItem(3, Icons.edit_note_rounded, "Note"),
         ],
@@ -87,7 +87,7 @@ class _MainNavigationState extends State<MainNavigation> {
               child: Icon(
                 icon,
                 color: isActive ? AppColors.accent : Colors.white,
-                size: 16,
+                size: 24,
               ),
             ),
             const SizedBox(height: 0),

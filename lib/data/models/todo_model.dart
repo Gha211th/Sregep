@@ -1,22 +1,22 @@
 class TodoModel {
   final int? id;
-  final String? task;
-  final String? date;
+  final String task;
+  final String date;
   final bool isCompleted;
 
   TodoModel({
     this.id,
     required this.task,
     required this.date,
-    this.isCompleted = false
+    this.isCompleted = false,
   });
 
   factory TodoModel.fromMap(Map<String, dynamic> map) {
     return TodoModel(
       id: map['id'],
-      task: map['task'],
-      date: map['date'],
-      isCompleted: map['is_Completed'] == 1,
+      task: map['task'] ?? '',
+      date: map['date'] ?? '',
+      isCompleted: map['is_completed'] == 1,
     );
   }
 
@@ -25,7 +25,7 @@ class TodoModel {
       'id': id,
       'task': task,
       'date': date,
-      'is_Completed': isCompleted ? 1 : 0,
+      'is_completed': isCompleted ? 1 : 0,
     };
   }
 }

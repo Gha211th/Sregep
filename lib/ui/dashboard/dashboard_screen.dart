@@ -13,6 +13,10 @@ class DashboardScreen extends StatelessWidget {
     final timerProvider = Provider.of<TimerProvider>(context);
     final screenWidth = MediaQuery.of(context).size;
 
+    // int getFontsizeForTitle(double width) {
+    // if (width >= 1600) ;
+    // }
+
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       body: SafeArea(
@@ -21,11 +25,11 @@ class DashboardScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: screenWidth.height * 0.08),
                 Text(
-                  "Hello Student",
+                  "Focus Mode",
                   style: GoogleFonts.outfit(
                     color: Color(0xFF34A0D3),
                     fontWeight: FontWeight.w500,
@@ -49,7 +53,7 @@ class DashboardScreen extends StatelessWidget {
                     child: TimerCircle(),
                   ),
                 ),
-                SizedBox(height: screenWidth.height * 0.05),
+                SizedBox(height: screenWidth.height * 0.04),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: _buildControlButtons(timerProvider, context),

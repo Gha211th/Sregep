@@ -60,6 +60,50 @@ class _TodoScreenState extends State<TodoScreen> {
                 onTodoAdded: _loadTodos,
                 primaryColor: AppColors.accent,
               ),
+              const SizedBox(height: 30),
+              const Divider(thickness: 1),
+              const SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSectionTitle('Your Todos', 'Do you have any list?'),
+                  Switch(
+                    value: _isCompleted,
+                    onChanged: (value) {
+                      setState(() {
+                        _isCompleted = value;
+                      });
+                      _loadTodos();
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              _todos.isEmpty
+                  ? Center(
+                      child: Text(
+                        "No task found here:(",
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _todos.length,
+                      itemBuilder: (context, index) {
+                        final todo = _todos[index];
+                        return TodoItemWidget(
+                          todo: todo,
+                          onToggle: () => handleToggle(todo),
+                        );
+                      },
+                    ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

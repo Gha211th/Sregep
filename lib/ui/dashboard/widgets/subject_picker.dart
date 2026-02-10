@@ -11,7 +11,7 @@ class SubjectPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final screenHeight = size.height;
-    final screenWidth = size.width;
+    // final screenWidth = size.width;
 
     final timerProvider = Provider.of<TimerProvider>(context);
     final List<String> subjects = ['MTK', 'IPA', 'IPS', 'Bhs.Indo', 'Bhs.Eng'];
@@ -19,18 +19,20 @@ class SubjectPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text("Select Mapel To Focus",
-         style: GoogleFonts.outfit(
-          fontSize: 13,
-          fontWeight: FontWeight.w500, 
-          color: AppColors.accent
-          )
+        Text(
+          "Select Mapel To Focus",
+          style: GoogleFonts.outfit(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: AppColors.accent,
+          ),
         ),
-        Text("What you wanna learn?",
+        Text(
+          "What you wanna learn?",
           style: GoogleFonts.outfit(
             fontSize: 10,
             fontWeight: FontWeight.w400,
-            color: Color(0xFFB3B3B3)
+            color: Color(0xFFB3B3B3),
           ),
         ),
         SizedBox(height: screenHeight * 0.02),
@@ -40,16 +42,13 @@ class SubjectPicker extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: AppColors.accent,
-              width: 1
-            )
+            border: Border.all(color: AppColors.accent, width: 1),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
               value: subjects.contains(timerProvider.selectedSubject)
-                ? timerProvider.selectedSubject
-                : subjects[0],
+                  ? timerProvider.selectedSubject
+                  : subjects[0],
               isExpanded: true,
               menuMaxHeight: 250,
               dropdownColor: Colors.white,
@@ -60,14 +59,15 @@ class SubjectPicker extends StatelessWidget {
                   value: subject,
                   child: Text("Mapel: $subject"),
                 );
-              }).toList(), 
+              }).toList(),
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   timerProvider.selectSubject(newValue);
                 }
-              }
-          )),
-        )
+              },
+            ),
+          ),
+        ),
       ],
     );
   }
