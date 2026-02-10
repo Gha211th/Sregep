@@ -85,11 +85,14 @@ class _TodoScreenState extends State<TodoScreen> {
 
               _todos.isEmpty
                   ? Center(
-                      child: Text(
-                        "No task found here:(",
-                        style: GoogleFonts.outfit(
-                          fontSize: 18,
-                          color: Colors.grey,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Text(
+                          "No task found here:(",
+                          style: GoogleFonts.outfit(
+                            fontSize: 18,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     )
