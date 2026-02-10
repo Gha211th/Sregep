@@ -5,6 +5,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'dart:math';
 
+import 'package:sregep_productivity_app/data/repo/study_repo.dart';
+
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
 
@@ -98,8 +100,9 @@ class StatsScreen extends StatelessWidget {
   }
 
   Widget _buildChartScetion() {
+    final StudyRepository _studyRepo = StudyRepository();
     return FutureBuilder<List<double>>(
-      future: DatabaseHelper.instance.getDailyStats(),
+      future: _studyRepo.getDailyStats(),
       builder: (context, snapshot) {
         List<double> data = snapshot.data ?? List.filled(7, 0.0);
         List<double> charData = data.map((seconds) => seconds / 60).toList();
@@ -150,8 +153,9 @@ class StatsScreen extends StatelessWidget {
   }
 
   Widget _buildSubjectProgressList() {
+    final StudyRepository _studyRepo = StudyRepository();
     return FutureBuilder(
-      future: DatabaseHelper.instance.getSubjectStats(),
+      future: _studyRepo.getSubjectStats(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text("No records yet, Start focusing"));

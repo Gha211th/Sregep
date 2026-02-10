@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:sregep_productivity_app/data/database_helper.dart';
+import 'package:sregep_productivity_app/data/repo/todo_repo.dart';
 
 class TodoFormWidget extends StatefulWidget {
   final VoidCallback onTodoAdded;
@@ -44,10 +44,12 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
     }
   }
 
+  final TodoRepository _todoRepo = TodoRepository();
+
   void _submitData() async {
     if (_nameController.text.isEmpty || _dateController.text.isEmpty) return;
 
-    await DatabaseHelper.instance.insertTodo({
+    await _todoRepo.insertTodo({
       'task': _nameController.text,
       'date': _dateController.text,
       'is_completed': 0,

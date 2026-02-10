@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sregep_productivity_app/data/database_helper.dart';
 import 'package:sregep_productivity_app/data/models/todo_model.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
+import 'package:sregep_productivity_app/data/repo/todo_repo.dart';
 import 'todos/widgets/todo_form_widget.dart';
 import 'todos/widgets/todo_item_widget.dart';
 
@@ -17,6 +17,8 @@ class _TodoScreenState extends State<TodoScreen> {
   bool _isCompleted = false;
   List<TodoModel> _todos = [];
 
+  final TodoRepository _todoRepo = TodoRepository();
+
   @override
   void initState() {
     super.initState();
@@ -24,14 +26,14 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   Future<void> _loadTodos() async {
-    final data = await DatabaseHelper.instance.queryTodos(_isCompleted);
+    final data = await _todoRepo.queryTodos(_isCompleted);
     setState(() {
       _todos = data.map((item) => TodoModel.fromMap(item)).toList();
     });
   }
 
   void handleToggle(TodoModel todo) async {
-    await DatabaseHelper.instance.updateTodoStatus(todo.id!, !todo.isCompleted);
+    await _todoRepo.updateTodoStatus(todo.id!, !todo.isCompleted);
     _loadTodos();
   }
 

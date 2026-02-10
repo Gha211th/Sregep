@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sregep_productivity_app/data/database_helper.dart';
 import 'widgets/subject_picker.dart';
 import 'widgets/timer_circle.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
+import 'package:sregep_productivity_app/data/repo/study_repo.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -67,6 +67,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildControlButtons(TimerProvider provider, BuildContext context) {
+    final studyRepo = StudyRepository();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -89,13 +90,13 @@ class DashboardScreen extends StatelessWidget {
                 final String subject = provider.selectedSubject;
                 final int duration = provider.currentSeconds;
 
-                await DatabaseHelper.instance.insertStudyRecord({
+                await studyRepo.insertStudyRecord({
                   'subject': subject,
                   'duration': duration,
                   'date': DateTime.now().toIso8601String(),
                 });
 
-                final allData = await DatabaseHelper.instance.queryAllRows();
+                final allData = await studyRepo.queryAllRows();
                 print("ISI DATABASE SEKARANG: $allData");
 
                 provider.restartTimer();
