@@ -86,7 +86,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     value: _isCompleted,
                     activeThumbColor: Colors.white,
                     activeTrackColor: AppColors.accent,
-                    inactiveTrackColor: Colors.grey,
+                    inactiveTrackColor: AppColors.accent,
                     inactiveThumbColor: Colors.white,
                     onChanged: (value) {
                       setState(() {
