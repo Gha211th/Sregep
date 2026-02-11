@@ -6,8 +6,9 @@ import 'package:sregep_productivity_app/data/models/todo_model.dart';
 class TodoItemWidget extends StatelessWidget {
   final TodoModel todo;
   final VoidCallback onToggle;
+  final VoidCallback onDelete;
 
-  const TodoItemWidget({super.key, required this.todo, required this.onToggle});
+  const TodoItemWidget({super.key, required this.todo, required this.onToggle, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,13 @@ class TodoItemWidget extends StatelessWidget {
               size: 32,
             ),
           ),
+          IconButton(
+            onPressed: onDelete,
+            icon: Icon(
+              Icons.delete,
+              color: Colors.redAccent,
+            ),
+          )
         ],
       ),
     );

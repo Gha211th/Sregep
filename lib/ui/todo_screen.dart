@@ -32,6 +32,18 @@ class _TodoScreenState extends State<TodoScreen> {
     });
   }
 
+  void handleDelete(int id) async {
+    await _todoRepo.deleteTodo(id);
+
+    _loadTodos();
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Item has been deleted'), backgroundColor: AppColors.accent),
+      );
+    }
+  }
+
   void handleToggle(TodoModel todo) async {
     await _todoRepo.updateTodoStatus(todo.id!, !todo.isCompleted);
     _loadTodos();
@@ -72,6 +84,10 @@ class _TodoScreenState extends State<TodoScreen> {
                   _buildSectionTitle('Your Todos', 'Do you have any list?'),
                   Switch(
                     value: _isCompleted,
+                    activeThumbColor: Colors.white,
+                    activeTrackColor: AppColors.accent,
+                    inactiveTrackColor: Colors.grey,
+                    inactiveThumbColor: Colors.white,
                     onChanged: (value) {
                       setState(() {
                         _isCompleted = value;
@@ -105,6 +121,7 @@ class _TodoScreenState extends State<TodoScreen> {
                         return TodoItemWidget(
                           todo: todo,
                           onToggle: () => handleToggle(todo),
+                          onDelete: () => handleDelete(todo.id!),
                         );
                       },
                     ),
