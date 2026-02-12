@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sregep_productivity_app/data/database_helper.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'dart:math';
@@ -61,6 +60,7 @@ class StatsScreen extends StatelessWidget {
             color: AppColors.accent,
             fontSize: 42,
             fontWeight: FontWeight.w500,
+            height: 1
           ),
         ),
         Text(
@@ -90,7 +90,7 @@ class StatsScreen extends StatelessWidget {
         Text(
           subtitle,
           style: GoogleFonts.outfit(
-            color: AppColors.accent,
+            color: Colors.grey,
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),

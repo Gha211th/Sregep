@@ -22,7 +22,7 @@ class SubjectPicker extends StatelessWidget {
         Text(
           "Select Mapel To Focus",
           style: GoogleFonts.outfit(
-            fontSize: 13,
+            fontSize: 20,
             fontWeight: FontWeight.w500,
             color: AppColors.accent,
           ),
@@ -30,7 +30,7 @@ class SubjectPicker extends StatelessWidget {
         Text(
           "What you wanna learn?",
           style: GoogleFonts.outfit(
-            fontSize: 10,
+            fontSize: 12,
             fontWeight: FontWeight.w400,
             color: Color(0xFFB3B3B3),
           ),

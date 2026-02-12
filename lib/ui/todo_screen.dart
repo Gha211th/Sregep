@@ -143,6 +143,7 @@ class _TodoScreenState extends State<TodoScreen> {
             color: AppColors.accent,
             fontSize: 42,
             fontWeight: FontWeight.w500,
+            height: 1
           ),
         ),
         Text(

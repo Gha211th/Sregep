@@ -17,8 +17,8 @@ class _MainNavigationState extends State<MainNavigation> {
   final PageController _pageController = PageController();
 
   final List<Widget> _screens = [
-    const StatsScreen(),
     const DashboardScreen(),
+    const StatsScreen(),
     const TodoScreen(),
     const Center(child: Text("NOTE STUDENT PAGE *idk about this one")),
   ];
@@ -45,15 +45,15 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget _buildCustomNavbar() {
     return Container(
       height: 80,
-      padding: const EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsetsGeometry.symmetric(horizontal: 40, vertical: 10),
       decoration: BoxDecoration(color: AppColors.accent),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _navItem(0, Icons.stacked_bar_chart, "Stats"),
-          _navItem(1, Icons.timer, "Focus"),
+          _navItem(0, Icons.timer, "Timer"),
+          _navItem(1, Icons.stacked_line_chart, "Stats"),
           _navItem(2, Icons.checklist_rtl_rounded, "Todos"),
-          _navItem(3, Icons.edit_note_rounded, "Note"),
+          _navItem(3, Icons.person_rounded, "Profile"),
         ],
       ),
     );

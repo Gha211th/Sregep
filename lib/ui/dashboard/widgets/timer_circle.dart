@@ -20,15 +20,15 @@ class TimerCircle extends StatelessWidget {
           children: [
             SizedBox(height: screenWidth.height * 0.04),
             Container(
-              width: diameter + 5,
-              height: diameter + 5,
+              width: diameter + 10,
+              height: diameter + 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
+                    color: Colors.black.withOpacity(0.07),
+                    blurRadius: 5,
                     offset: const Offset(0, 0),
                   ),
                 ],
@@ -52,7 +52,7 @@ class TimerCircle extends StatelessWidget {
                     width: diameter,
                     height: diameter,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: CircularProgressIndicator(
                         value: timerProvider.progress,
                         strokeWidth: strokeWidth,

@@ -33,14 +33,14 @@ class DashboardScreen extends StatelessWidget {
                   style: GoogleFonts.outfit(
                     color: Color(0xFF34A0D3),
                     fontWeight: FontWeight.w500,
-                    fontSize: 40,
+                    fontSize: 42,
                     height: 1,
                   ),
                 ),
                 Text(
                   "Ready to be productive?",
                   style: GoogleFonts.outfit(
-                    fontSize: 15,
+                    fontSize: 20,
                     color: Color(0xffB3B3B3),
                     fontWeight: FontWeight.w400,
                   ),
@@ -55,7 +55,7 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 SizedBox(height: screenWidth.height * 0.04),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: _buildControlButtons(timerProvider, context),
                 ),
               ],
@@ -74,7 +74,7 @@ class DashboardScreen extends StatelessWidget {
         Row(
           children: [
             Expanded(child: _buildStartButton(provider, context)),
-            const SizedBox(width: 10),
+            const SizedBox(width: 40),
             Expanded(child: _buildStopButton(provider, context)),
           ],
         ),
