@@ -20,7 +20,7 @@ class _MainNavigationState extends State<MainNavigation> {
     const DashboardScreen(),
     const StatsScreen(),
     const TodoScreen(),
-    const Center(child: Text("NOTE STUDENT PAGE *idk about this one")),
+//    const Center(child: Text("NOTE STUDENT PAGE *idk about this one")),
   ];
 
   @override
@@ -45,7 +45,7 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget _buildCustomNavbar() {
     return Container(
       height: 80,
-      padding: const EdgeInsetsGeometry.symmetric(horizontal: 40, vertical: 10),
+      padding: const EdgeInsetsGeometry.symmetric(horizontal: 70, vertical: 10),
       decoration: BoxDecoration(color: AppColors.accent),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,7 +53,7 @@ class _MainNavigationState extends State<MainNavigation> {
           _navItem(0, Icons.timer, "Timer"),
           _navItem(1, Icons.stacked_line_chart, "Stats"),
           _navItem(2, Icons.checklist_rtl_rounded, "Todos"),
-          _navItem(3, Icons.person_rounded, "Profile"),
+  //        _navItem(3, Icons.person_rounded, "Profile"),
         ],
       ),
     );
