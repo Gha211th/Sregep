@@ -56,7 +56,8 @@ class TodoItemWidget extends StatelessWidget {
             onPressed: onDelete,
             icon: Icon(
               Icons.delete,
-              color: Colors.redAccent,
+              color: AppColors.accent,
+              size: 32,
             ),
           )
         ],

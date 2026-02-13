@@ -57,7 +57,7 @@ class SubjectPicker extends StatelessWidget {
               items: subjects.map((String subject) {
                 return DropdownMenuItem<String>(
                   value: subject,
-                  child: Text("Mapel: $subject"),
+                  child: Text("Mapel: $subject", style: GoogleFonts.outfit(fontSize: 14, color: AppColors.accent)),
                 );
               }).toList(),
               onChanged: (String? newValue) {
