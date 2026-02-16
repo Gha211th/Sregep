@@ -29,7 +29,7 @@ class DashboardScreen extends StatelessWidget {
               children: [
                 SizedBox(height: screenWidth.height * 0.08),
                 Text(
-                  "Focus Mode",
+                  "Hello Student",
                   style: GoogleFonts.outfit(
                     color: Color(0xFF34A0D3),
                     fontWeight: FontWeight.w500,
@@ -45,7 +45,7 @@ class DashboardScreen extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                SizedBox(height: screenWidth.height * 0.03),
+                SizedBox(height: screenWidth.height * 0.05),
                 SubjectPicker(),
                 Center(
                   child: Padding(

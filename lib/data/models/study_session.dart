@@ -1,8 +1,8 @@
 class StudySession {
   final int? id;
   final String subject;
-  final int? duration;
-  final String? date;
+  final int duration;
+  final String date;
 
   StudySession({
     this.id,
@@ -12,15 +12,15 @@ class StudySession {
   });
 
   Map<String, dynamic> toMap() {
-    return {'id': id, 'subject': subject, 'duration': duration, 'date': date};
+    return {if (id != null) 'id': id, 'subject': subject, 'duration': duration, 'date': date};
   }
 
   factory StudySession.fromMap(Map<String, dynamic> map) {
     return StudySession(
-      id: map['id'],
-      subject: map['subject'],
-      duration: map['duration'],
-      date: map['date'],
+      id: map['id'] as int?,
+      subject: map['subject'] as String,
+      duration: map['duration'] as int,
+      date: map['date'] as String,
     );
   }
 }

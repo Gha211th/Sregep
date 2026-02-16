@@ -39,7 +39,10 @@ class _TodoScreenState extends State<TodoScreen> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Item has been deleted'), backgroundColor: AppColors.accent),
+        SnackBar(
+          content: Text('Item has been deleted'),
+          backgroundColor: AppColors.accent,
+        ),
       );
     }
   }
@@ -84,7 +87,7 @@ class _TodoScreenState extends State<TodoScreen> {
                   _buildSectionTitle('Your Todos', 'Do you have any list?'),
                   Switch(
                     value: _isCompleted,
-                    activeThumbColor: Colors.white,
+                    acqtiveThumbColor: Colors.white,
                     activeTrackColor: AppColors.accent,
                     inactiveTrackColor: AppColors.accent,
                     inactiveThumbColor: Colors.white,
@@ -143,7 +146,7 @@ class _TodoScreenState extends State<TodoScreen> {
             color: AppColors.accent,
             fontSize: 42,
             fontWeight: FontWeight.w500,
-            height: 1
+            height: 1,
           ),
         ),
         Text(

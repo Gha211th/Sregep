@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'dart:async';
 
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._init();
@@ -56,5 +57,30 @@ class DatabaseService {
         )
       ''');
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getStudyStats(String range) async {
+    final db = await database;
+    String timeCondition;
+
+    switch (range) {
+      case 'Bulan Ini':
+        timeCondition = "date('now', 'start of month)";
+        break;
+      case 'Tahun Ini':
+        timeCondition = "date('now', 'start of year)";
+        break;
+      case 'Minggu Ini':
+      default:
+        timeCondition = "date('now', '-7 days')";
+    }
+
+    return await db.rawQuery('''
+      SELECT data, SUM(duration) as total
+      FROM study_records
+      WHERE date >= $timeCondition,
+      GROUP BY date
+      GROUP BY date ASC
+    ''');
   }
 }
