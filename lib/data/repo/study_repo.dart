@@ -37,20 +37,31 @@ class StudyRepository {
 
     for (var row in maps) {
       try {
-        int index = 0;
+        String labelRaw = row['label'].toString();
+        int index = -1;
+
+        DateTime? date;
+        try {
+          date = DateTime.parse(labelRaw);
+        } catch (_) {}
+
         if (range == 'Tahun Ini') {
-          index = int.parse(row['label']) - 1;
+          index = (date != null ? date.month : int.parse(labelRaw)) - 1;
         } else if (range == 'Bulan Ini') {
-          index = int.parse(row['label']) - 1;
+          index = (date != null ? date.day : int.parse(labelRaw)) - 1;
         } else {
-          index = maps.indexOf(row);
+          if (date != null) {
+            index = date.weekday - 1;
+          } else {
+            index = int.parse(labelRaw);
+          }
         }
 
         if (index >= 0 && index < expectedLength) {
-          fullData[index] = (row['total'] as num).toDouble();
+          fullData[index] += (row['total'] as num).toDouble();
         }
       } catch (e) {
-        print("error parsing data index");
+        debugPrint("Error mapping data $e for label: ${row['label']}");
       }
     }
     return fullData;

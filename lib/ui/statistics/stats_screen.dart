@@ -156,11 +156,8 @@ class _StatsScreenState extends State<StatsScreen> {
         if (charData.isEmpty) charData = [0.0];
 
         double maxData = charData.isEmpty ? 0 : charData.reduce(max);
-        double calculateMaxY = maxData == 0 ? 10 : maxData + (maxData * 0.2);
-        double dynamicInterval = (calculateMaxY / 5).clamp(
-          1.0,
-          double.infinity,
-        );
+        double calculateMaxY = maxData < 5 ? 5 : maxData + (maxData * 0.2);
+        double dynamicInterval = calculateMaxY / 5;
 
         return Container(
           height: 250,
@@ -171,6 +168,7 @@ class _StatsScreenState extends State<StatsScreen> {
           ),
           child: BarChart(
             BarChartData(
+              alignment: BarChartAlignment.spaceAround,
               maxY: calculateMaxY,
               minY: 0,
               barGroups: List.generate(
@@ -205,9 +203,9 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   double _getBarWidth() {
-    if (_selectedFilter == 'Minggu Ini') return 14;
-    if (_selectedFilter == 'Bulan Ini') return 4;
-    return 10;
+    if (_selectedFilter == 'Minggu Ini') return 22;
+    if (_selectedFilter == 'Bulan Ini') return 6;
+    return 18;
   }
 
   Widget _buildSubjectProgressList() {
