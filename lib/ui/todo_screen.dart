@@ -87,7 +87,6 @@ class _TodoScreenState extends State<TodoScreen> {
                   _buildSectionTitle('Your Todos', 'Do you have any list?'),
                   Switch(
                     value: _isCompleted,
-                    acqtiveThumbColor: Colors.white,
                     activeTrackColor: AppColors.accent,
                     inactiveTrackColor: AppColors.accent,
                     inactiveThumbColor: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sregep_productivity_app/data/database_helper.dart';
 
 class StudyRepository {
@@ -23,22 +24,35 @@ class StudyRepository {
     ''');
   }
 
-  Future<List<double>> getDailyStats() async {
-    final db = await _dbService.database;
-    final List<double> dailyDurations = List.filled(7, 0.0);
-    final List<Map<String, dynamic>> maps = await db.query('study_records');
+  Future<List<double>> getDailyStats({required String range}) async {
+    final List<Map<String, dynamic>> maps = await _dbService.getStudyStats(
+      range,
+    );
+
+    int expectedLength = 7;
+    if (range == 'Bulan Ini') expectedLength = 31;
+    if (range == 'Tahun Ini') expectedLength = 12;
+
+    List<double> fullData = List.filled(expectedLength, 0.0);
 
     for (var row in maps) {
       try {
-        DateTime date = DateTime.parse(row['date']);
-        int dayIndex = date.weekday - 1;
-        if (dayIndex >= 0 && dayIndex < 7) {
-          dailyDurations[dayIndex] += row['duration'].toDouble();
+        int index = 0;
+        if (range == 'Tahun Ini') {
+          index = int.parse(row['label']) - 1;
+        } else if (range == 'Bulan Ini') {
+          index = int.parse(row['label']) - 1;
+        } else {
+          index = maps.indexOf(row);
+        }
+
+        if (index >= 0 && index < expectedLength) {
+          fullData[index] = (row['total'] as num).toDouble();
         }
       } catch (e) {
-        print('Error parsing date: $e');
+        print("error parsing data index");
       }
     }
-    return dailyDurations;
+    return fullData;
   }
 }

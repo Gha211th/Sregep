@@ -14,6 +14,9 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
+  String _selectedFilter = 'Minggu Ini';
+  final List<String> _filterOptions = ['Minggu Ini', 'Bulan Ini', 'Tahun Ini'];
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -37,6 +40,8 @@ class _StatsScreenState extends State<StatsScreen> {
                 'Have you reached your goals?',
               ),
               const SizedBox(height: 15),
+              _dropDownOptions(),
+              const SizedBox(height: 15),
 
               _buildChartScetion(),
               const SizedBox(height: 30),
@@ -50,6 +55,31 @@ class _StatsScreenState extends State<StatsScreen> {
               const SizedBox(height: 30),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _dropDownOptions() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.accent),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: _selectedFilter,
+          items: _filterOptions.map((String val) {
+            return DropdownMenuItem(value: val, child: Text(val));
+          }).toList(),
+          onChanged: (String? newVal) {
+            if (newVal != null) {
+              setState(() {
+                _selectedFilter = newVal;
+              });
+            }
+          },
         ),
       ),
     );
@@ -107,10 +137,24 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget _buildChartScetion() {
     final StudyRepository _studyRepo = StudyRepository();
     return FutureBuilder<List<double>>(
-      future: _studyRepo.getDailyStats(),
+      future: _studyRepo.getDailyStats(range: _selectedFilter),
       builder: (context, snapshot) {
-        List<double> data = snapshot.data ?? List.filled(7, 0.0);
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox(
+            height: 250,
+            child: Center(
+              child: CircularProgressIndicator(color: AppColors.accent),
+            ),
+          );
+        }
+
+        List<double> data = snapshot.data ?? [];
+
+        if (data.isEmpty) data = [0.0];
+
         List<double> charData = data.map((seconds) => seconds / 60).toList();
+        if (charData.isEmpty) charData = [0.0];
+
         double maxData = charData.isEmpty ? 0 : charData.reduce(max);
         double calculateMaxY = maxData == 0 ? 10 : maxData + (maxData * 0.2);
         double dynamicInterval = (calculateMaxY / 5).clamp(
@@ -129,8 +173,11 @@ class _StatsScreenState extends State<StatsScreen> {
             BarChartData(
               maxY: calculateMaxY,
               minY: 0,
-              barGroups: List.generate(7, (i) => _makeBarGroup(i, charData[i])),
-              titlesData: _buildChartTitles(),
+              barGroups: List.generate(
+                charData.length,
+                (i) => _makeBarGroup(i, charData[i], width: _getBarWidth()),
+              ),
+              titlesData: _buildChartTitles(dataCount: charData.length),
               barTouchData: BarTouchData(
                 touchTooltipData: BarTouchTooltipData(
                   getTooltipColor: (group) => AppColors.accent,
@@ -155,6 +202,12 @@ class _StatsScreenState extends State<StatsScreen> {
         );
       },
     );
+  }
+
+  double _getBarWidth() {
+    if (_selectedFilter == 'Minggu Ini') return 14;
+    if (_selectedFilter == 'Bulan Ini') return 4;
+    return 10;
   }
 
   Widget _buildSubjectProgressList() {
@@ -182,34 +235,70 @@ class _StatsScreenState extends State<StatsScreen> {
     );
   }
 
-  BarChartGroupData _makeBarGroup(int x, double y) {
+  BarChartGroupData _makeBarGroup(int x, double y, {required double width}) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
           toY: y,
           color: AppColors.accent,
-          width: 14,
+          width: width,
           borderRadius: BorderRadius.circular(10),
         ),
       ],
     );
   }
 
-  FlTitlesData _buildChartTitles() {
+  FlTitlesData _buildChartTitles({required int dataCount}) {
     return FlTitlesData(
       bottomTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (v, m) {
-            const day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-            return Padding(
-              padding: const EdgeInsetsGeometry.only(top: 8),
-              child: Text(
-                day[v.toInt()],
-                style: GoogleFonts.outfit(fontSize: 10),
-              ),
-            );
+            int index = v.toInt();
+
+            if (_selectedFilter == 'Minggu Ini') {
+              const days = ['Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+              if (index >= 0 && index < days.length) {
+                return Text(
+                  days[index],
+                  style: GoogleFonts.outfit(fontSize: 10),
+                );
+              }
+            }
+
+            if (_selectedFilter == 'Bulan Ini') {
+              if (index % 5 == 0 && index < 31) {
+                return Text(
+                  "${index + 1}",
+                  style: GoogleFonts.outfit(fontSize: 10),
+                );
+              }
+            }
+
+            if (_selectedFilter == 'Tahun Ini') {
+              const month = [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec',
+              ];
+              if (index >= 0 && index < month.length && index % 2 == 0) {
+                return Text(
+                  month[index],
+                  style: GoogleFonts.outfit(fontSize: 10),
+                );
+              }
+            }
+            return const SizedBox();
           },
         ),
       ),
@@ -219,7 +308,7 @@ class _StatsScreenState extends State<StatsScreen> {
           reservedSize: 35,
           interval: 25,
           getTitlesWidget: (v, m) =>
-              Text("${v.toInt()}Min", style: GoogleFonts.outfit(fontSize: 10)),
+              Text("${v.toInt()}m", style: GoogleFonts.outfit(fontSize: 10)),
         ),
       ),
       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),

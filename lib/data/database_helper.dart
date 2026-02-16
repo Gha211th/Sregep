@@ -61,26 +61,34 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getStudyStats(String range) async {
     final db = await database;
-    String timeCondition;
+    String query;
 
-    switch (range) {
-      case 'Bulan Ini':
-        timeCondition = "date('now', 'start of month)";
-        break;
-      case 'Tahun Ini':
-        timeCondition = "date('now', 'start of year)";
-        break;
-      case 'Minggu Ini':
-      default:
-        timeCondition = "date('now', '-7 days')";
+    if (range == 'Tahun Ini') {
+      query = '''
+      SELECT strftime('%m', date) as label, SUM(duration) as total 
+      FROM study_records 
+      WHERE date >= date('now', 'start of year')
+      GROUP BY label 
+      ORDER BY label ASC
+    ''';
+    } else if (range == 'Bulan Ini') {
+      query = '''
+      SELECT strftime('%d', date) as label, SUM(duration) as total 
+      FROM study_records 
+      WHERE date >= date('now', 'start of month')
+      GROUP BY label 
+      ORDER BY label ASC
+    ''';
+    } else {
+      query = '''
+      SELECT date as label, SUM(duration) as total 
+      FROM study_records 
+      WHERE date >= date('now', '-7 days')
+      GROUP BY label 
+      ORDER BY label ASC
+    ''';
     }
 
-    return await db.rawQuery('''
-      SELECT data, SUM(duration) as total
-      FROM study_records
-      WHERE date >= $timeCondition,
-      GROUP BY date
-      GROUP BY date ASC
-    ''');
+    return await db.rawQuery(query);
   }
 }
