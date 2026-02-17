@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sregep_productivity_app/core/constants.dart';
 import 'widgets/subject_picker.dart';
 import 'widgets/timer_circle.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
@@ -13,10 +14,6 @@ class DashboardScreen extends StatelessWidget {
     final timerProvider = Provider.of<TimerProvider>(context);
     final screenWidth = MediaQuery.of(context).size;
 
-    // int getFontsizeForTitle(double width) {
-    // if (width >= 1600) ;
-    // }
-
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       body: SafeArea(
@@ -25,7 +22,7 @@ class DashboardScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: screenWidth.height * 0.08),
                 Text(

@@ -71,7 +71,16 @@ class _StatsScreenState extends State<StatsScreen> {
         child: DropdownButton(
           value: _selectedFilter,
           items: _filterOptions.map((String val) {
-            return DropdownMenuItem(value: val, child: Text(val));
+            return DropdownMenuItem(
+              value: val,
+              child: Text(
+                "$val",
+                style: GoogleFonts.outfit(
+                  fontSize: 14,
+                  color: AppColors.accent,
+                ),
+              ),
+            );
           }).toList(),
           onChanged: (String? newVal) {
             if (newVal != null) {
@@ -203,9 +212,9 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   double _getBarWidth() {
-    if (_selectedFilter == 'Minggu Ini') return 22;
+    if (_selectedFilter == 'Minggu Ini') return 8;
     if (_selectedFilter == 'Bulan Ini') return 6;
-    return 18;
+    return 8;
   }
 
   Widget _buildSubjectProgressList() {
@@ -266,10 +275,10 @@ class _StatsScreenState extends State<StatsScreen> {
             }
 
             if (_selectedFilter == 'Bulan Ini') {
-              if (index % 5 == 0 && index < 31) {
+              if (index % 3 == 0 && index < 31) {
                 return Text(
                   "${index + 1}",
-                  style: GoogleFonts.outfit(fontSize: 10),
+                  style: GoogleFonts.outfit(fontSize: 9),
                 );
               }
             }
@@ -289,10 +298,10 @@ class _StatsScreenState extends State<StatsScreen> {
                 'Nov',
                 'Dec',
               ];
-              if (index >= 0 && index < month.length && index % 2 == 0) {
+              if (index >= 0 && index < month.length && index % 1 == 0) {
                 return Text(
                   month[index],
-                  style: GoogleFonts.outfit(fontSize: 10),
+                  style: GoogleFonts.outfit(fontSize: 9),
                 );
               }
             }
