@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
-import 'package:sregep_productivity_app/ui/dashboard/dashboard_screen.dart';
-import 'package:sregep_productivity_app/ui/statistics/stats_screen.dart';
-import 'package:sregep_productivity_app/ui/todo_screen.dart';
+import 'package:sregep_productivity_app/ui/mobile/dashboard_screen.dart';
+import 'package:sregep_productivity_app/ui/mobile/stats_screen.dart';
+import 'package:sregep_productivity_app/ui/mobile/todo_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});

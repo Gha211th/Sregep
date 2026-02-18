@@ -144,9 +144,9 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   Widget _buildChartScetion() {
-    final StudyRepository _studyRepo = StudyRepository();
+    final StudyRepository _StudyRepo = StudyRepository();
     return FutureBuilder<List<double>>(
-      future: _studyRepo.getDailyStats(range: _selectedFilter),
+      future: _StudyRepo.getDailyStats(range: _selectedFilter),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox(

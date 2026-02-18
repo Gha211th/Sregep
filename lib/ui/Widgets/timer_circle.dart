@@ -12,8 +12,8 @@ class TimerCircle extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size;
 
     return LayoutBuilder(
-      builder: (context, Constraints) {
-        double diameter = Constraints.maxWidth * 0.6;
+      builder: (context, constraints) {
+        double diameter = constraints.maxWidth * 0.6;
         double strokeWidth = diameter * 0.05;
 
         return Column(

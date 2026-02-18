@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sregep_productivity_app/core/constants.dart';
-import 'widgets/subject_picker.dart';
-import 'widgets/timer_circle.dart';
+import 'package:sregep_productivity_app/ui/Widgets/subject_picker.dart';
+import 'package:sregep_productivity_app/ui/Widgets/timer_circle.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
 import 'package:sregep_productivity_app/data/repo/study_repo.dart';
 

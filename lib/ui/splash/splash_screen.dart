@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sregep_productivity_app/ui/dashboard/widgets/widget_navbar.dart';
+import 'package:sregep_productivity_app/ui/Widgets/widget_navbar.dart';
 import 'dart:async';
 // import '../dashboard/dashboard_screen.dart';
 
