@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
-import 'package:sregep_productivity_app/ui/mobile/dashboard_screen.dart';
-import 'package:sregep_productivity_app/ui/mobile/stats_screen.dart';
-import 'package:sregep_productivity_app/ui/mobile/todo_screen.dart';
+import 'package:sregep_productivity_app/ui/pages/dashboard_screen.dart';
+import 'package:sregep_productivity_app/ui/pages/stats_screen.dart';
+import 'package:sregep_productivity_app/ui/pages/todo_screen.dart';
 
-class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+class MainNavigationMobile extends StatefulWidget {
+  const MainNavigationMobile({super.key});
 
   @override
-  State<MainNavigation> createState() => _MainNavigationState();
+  State<MainNavigationMobile> createState() => _MainNavigationState();
 }
 
-class _MainNavigationState extends State<MainNavigation> {
+class _MainNavigationState extends State<MainNavigationMobile> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
 
@@ -43,7 +43,6 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 
   Widget _buildCustomNavbar() {
-
     final screenSize = MediaQuery.of(context).size;
 
     double getPaddingForNavbar(double width) {
@@ -54,7 +53,10 @@ class _MainNavigationState extends State<MainNavigation> {
 
     return Container(
       height: 80,
-      padding: EdgeInsetsGeometry.symmetric(horizontal: getPaddingForNavbar(screenSize.width), vertical: 10),
+      padding: EdgeInsetsGeometry.symmetric(
+        horizontal: getPaddingForNavbar(screenSize.width),
+        vertical: 10,
+      ),
       decoration: BoxDecoration(color: AppColors.accent),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,39 +112,6 @@ class _MainNavigationState extends State<MainNavigation> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildSideNavbar(BuildContext context) {
-    return Container(
-      width: 250,
-      color: AppColors.accent,
-      padding: const EdgeInsetsGeometry.symmetric(horizontal: 40, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Sregep.",
-            style: GoogleFonts.outfit(
-              color: AppColors.accent,
-              fontSize: 32,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Text(
-            "[ Focus - Study - Achieve ]",
-            style: GoogleFonts.outfit(
-              color: AppColors.accent,
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 60),
-          _navItem(0, Icons.timer, "Focus Timer"),
-          _navItem(1, Icons.stacked_line_chart, "Statistic"),
-          _navItem(2, Icons.checklist_rtl_rounded, "Todo List"),
-        ],
       ),
     );
   }

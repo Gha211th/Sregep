@@ -5,7 +5,6 @@ class SettingServices {
   static const String _accentColorKey = "accent_color";
   static const String _displayNameKey = "display_name";
 
-
   // TIMER SETTING
   Future<void> setTimerDuration(int minutes) async {
     final prefs = await SharedPreferences.getInstance();
@@ -34,8 +33,8 @@ class SettingServices {
     await prefs.setString(_displayNameKey, name);
   }
 
-  Future<String> _getDisplayName() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_displayNameKey) ?? "Your";
-  }
+  // Future<String> _getDisplayName() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString(_displayNameKey) ?? "Your";
+  // }
 }

@@ -8,7 +8,12 @@ class TodoItemWidget extends StatelessWidget {
   final VoidCallback onToggle;
   final VoidCallback onDelete;
 
-  const TodoItemWidget({super.key, required this.todo, required this.onToggle, required this.onDelete});
+  const TodoItemWidget({
+    super.key,
+    required this.todo,
+    required this.onToggle,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +59,8 @@ class TodoItemWidget extends StatelessWidget {
           ),
           IconButton(
             onPressed: onDelete,
-            icon: Icon(
-              Icons.delete,
-              color: AppColors.accent,
-              size: 32,
-            ),
-          )
+            icon: Icon(Icons.delete, color: AppColors.accent, size: 32),
+          ),
         ],
       ),
     );
