@@ -43,9 +43,18 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 
   Widget _buildCustomNavbar() {
+
+    final screenSize = MediaQuery.of(context).size;
+
+    double getPaddingForNavbar(double width) {
+      if (width < 480) return 40.0;
+      if (width < 800) return 60.0;
+      return 90;
+    }
+
     return Container(
       height: 80,
-      padding: const EdgeInsetsGeometry.symmetric(horizontal: 70, vertical: 10),
+      padding: EdgeInsetsGeometry.symmetric(horizontal: getPaddingForNavbar(screenSize.width), vertical: 10),
       decoration: BoxDecoration(color: AppColors.accent),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

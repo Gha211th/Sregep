@@ -53,6 +53,19 @@ class TimerProvider with ChangeNotifier {
     _isRunning = false;
     _currentSeconds = 0;
     _remainingSeconds = 1500;
-    notifyListeners();  
+    notifyListeners();
+  }
+
+  void addTimer(int minutes) {
+    if (_isRunning) return;
+    _remainingSeconds += minutes * 60;
+    if (_remainingSeconds < 0) _remainingSeconds = 0;
+    notifyListeners();
+  }
+
+  void adjustSeconds(int seconds) {
+    _remainingSeconds += seconds;
+    if (_remainingSeconds < 0) _remainingSeconds = 0;
+    notifyListeners();
   }
 }

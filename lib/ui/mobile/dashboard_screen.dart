@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/ui/Widgets/subject_picker.dart';
 import 'package:sregep_productivity_app/ui/Widgets/timer_circle.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
@@ -8,10 +9,27 @@ import 'package:sregep_productivity_app/data/repo/study_repo.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
+  
+  double getFontSizeForTitle(double width) {
+    if (width >= 1600) return 64;
+    if (width >= 1200) return 48;
+    if (width >= 800) return 44;
+    if (width >= 480) return 40;
+    return 38;
+  }
+
+  double getFontSizeForSubTitle(double width) {
+    if (width >= 1600) return 38;
+    if (width >= 1200) return 30;
+    if (width >= 800) return 28;
+    if (width >= 480) return 24;
+    return 20;
+  }
+
   @override
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
-    final screenWidth = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
@@ -21,27 +39,27 @@ class DashboardScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: screenWidth.height * 0.08),
+                SizedBox(height: screenSize.height * 0.08),
                 Text(
                   "Hello Student",
                   style: GoogleFonts.outfit(
                     color: Color(0xFF34A0D3),
                     fontWeight: FontWeight.w500,
-                    fontSize: 42,
+                    fontSize: getFontSizeForTitle(screenSize.width),
                     height: 1,
                   ),
                 ),
                 Text(
                   "Ready to be productive?",
                   style: GoogleFonts.outfit(
-                    fontSize: 20,
+                    fontSize: getFontSizeForSubTitle(screenSize.width),
                     color: Color(0xffB3B3B3),
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                SizedBox(height: screenWidth.height * 0.05),
+                SizedBox(height: screenSize.height * 0.05),
                 SubjectPicker(),
                 Center(
                   child: Padding(
@@ -49,9 +67,10 @@ class DashboardScreen extends StatelessWidget {
                     child: TimerCircle(),
                   ),
                 ),
-                SizedBox(height: screenWidth.height * 0.04),
+                _buildTimerControls(context, timerProvider),
+                SizedBox(height: screenSize.height * 0.04),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0), 
                   child: _buildControlButtons(timerProvider, context),
                 ),
               ],
@@ -178,6 +197,27 @@ class DashboardScreen extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
       ),
+    );
+  }
+
+  Widget _buildTimerControls(BuildContext context, TimerProvider provider) {
+    final bool isRunning = provider.isRunning;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _timeActionButton(icon: Icons.remove, onPressed: isRunning ?  null : () => provider.adjustSeconds(-300)),
+        IconButton(onPressed: () => provider.restartTimer(), icon: const Icon(Icons.refresh)),
+        _timeActionButton(icon: Icons.add, onPressed: isRunning ?  null : () => provider.adjustSeconds(300))
+      ],
+    );
+  }
+
+  Widget _timeActionButton({required IconData icon, VoidCallback? onPressed}) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(shape: const CircleBorder()),
+      onPressed: onPressed,
+      child: Icon(icon, color: AppColors.accent,),
     );
   }
 }

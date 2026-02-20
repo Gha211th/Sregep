@@ -17,6 +17,22 @@ class _TodoScreenState extends State<TodoScreen> {
   bool _isCompleted = false;
   List<TodoModel> _todos = [];
 
+  double getFontSizeForTitle(double width) {
+    if (width >= 1600) return 64;
+    if (width >= 1200) return 48;
+    if (width >= 800) return 44;
+    if (width > 480) return 40;
+    return 38;
+  }
+
+  double getFontSizeForSubTitle(double width) {
+    if (width >= 1600) return 38;
+    if (width >= 1200) return 30;
+    if (width >= 800) return 28;
+    if (width >= 480) return 24;
+    return 20;
+  }
+
   final TodoRepository _todoRepo = TodoRepository();
 
   @override
@@ -54,7 +70,9 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -136,6 +154,9 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   Widget _buildHeader() {
+    
+    final screenSize = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -143,7 +164,7 @@ class _TodoScreenState extends State<TodoScreen> {
           "Your Todos",
           style: GoogleFonts.outfit(
             color: AppColors.accent,
-            fontSize: 42,
+            fontSize: getFontSizeForTitle(screenSize.width),
             fontWeight: FontWeight.w500,
             height: 1,
           ),
@@ -152,7 +173,7 @@ class _TodoScreenState extends State<TodoScreen> {
           "Schdule your todos",
           style: GoogleFonts.outfit(
             color: Colors.grey,
-            fontSize: 20,
+            fontSize: getFontSizeForTitle(screenSize.width),
             fontWeight: FontWeight.w400,
           ),
         ),
