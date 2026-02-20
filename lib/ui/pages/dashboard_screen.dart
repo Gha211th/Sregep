@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_native_type_patch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:sregep_productivity_app/ui/Widgets/subject_picker.dart';
 import 'package:sregep_productivity_app/ui/Widgets/timer_circle.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
 import 'package:sregep_productivity_app/data/repo/study_repo.dart';
+
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -49,6 +52,8 @@ class DashboardScreen extends StatelessWidget {
                     child: TimerCircle(),
                   ),
                 ),
+                SizedBox(height: 10,),
+                _buildTimerControls(context, timerProvider),
                 SizedBox(height: screenWidth.height * 0.04),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -178,6 +183,29 @@ class DashboardScreen extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
       ),
+    );
+  }
+
+  Widget _buildTimerControls(BuildContext context, TimerProvider provider) {
+    final bool isRunning = provider.isRunning;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _timeActionButton(icon: Icons.remove, onPressed: isRunning ? null : () => provider.adjustSeconds(-300)),
+        const SizedBox(width: 20,),
+        IconButton(onPressed: () => provider.restartTimer(), icon: const Icon(Icons.refresh)),
+        const SizedBox(width: 20,),
+        _timeActionButton(icon: Icons.add, onPressed: isRunning ? null : () => provider.adjustSeconds(300))
+      ],
+    );
+  }
+
+  Widget _timeActionButton({required IconData icon, VoidCallback? onPressed}) {
+    return OutlinedButton(
+      style:  OutlinedButton.styleFrom(shape: const CircleBorder()),
+      onPressed: onPressed,
+      child: Icon(icon),
     );
   }
 }
