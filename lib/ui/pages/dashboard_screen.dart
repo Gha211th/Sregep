@@ -15,54 +15,25 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
-    final screenWidth = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color(0xFFF8F9FA),
+      backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: screenWidth.height * 0.08),
-                Text(
-                  "Hello Student",
-                  style: GoogleFonts.outfit(
-                    color: Color(0xFF34A0D3),
-                    fontWeight: FontWeight.w500,
-                    fontSize: 42,
-                    height: 1,
-                  ),
-                ),
-                Text(
-                  "Ready to be productive?",
-                  style: GoogleFonts.outfit(
-                    fontSize: 20,
-                    color: Color(0xffB3B3B3),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(height: screenWidth.height * 0.05),
-                SubjectPicker(),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: TimerCircle(),
-                  ),
-                ),
-                SizedBox(height: 10),
-                _buildTimerControls(context, timerProvider),
-                SizedBox(height: screenWidth.height * 0.04),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: _buildControlButtons(timerProvider, context),
-                ),
-              ],
-            ),
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth > 900) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: _buildDesktopMode(context, timerProvider),
+              );
+            } else {
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: _buildMobileMode(context, timerProvider),
+              );
+            }
+          },
         ),
       ),
     );
@@ -114,6 +85,8 @@ class DashboardScreen extends StatelessWidget {
 
   Widget _buildDesktopMode(BuildContext context, TimerProvider provider) {
     final screenSize = MediaQuery.of(context).size;
+    final timerProvider = Provider.of<TimerProvider>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -128,10 +101,30 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
         Text("Ready to be productive?"),
+        SizedBox(height: screenSize.height * 0.05),
+        const Divider(thickness: 1),
         SizedBox(height: screenSize.height * 0.08),
         Row(
           children: [
-            Column(),
+            Column(
+              children: [
+                SubjectPicker(),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.symmetric(vertical: 20),
+                    child: NormalTimer(),
+                  ),
+                ),
+                SizedBox(height: screenSize.height * 0.01),
+                _buildTimerControls(context, timerProvider),
+                SizedBox(height: screenSize.height * 0.04),
+                Padding(
+                  padding: EdgeInsetsGeometry.all(10.0),
+                  child: _buildControlButtons(timerProvider, context),
+                ),
+              ],
+            ),
+            const Divider(thickness: 1),
             Row(
               children: [
                 _buildMoreDetailHeader(),
@@ -173,6 +166,7 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ],
             ),
+            const Divider(thickness: 1),
           ],
         ),
       ],
