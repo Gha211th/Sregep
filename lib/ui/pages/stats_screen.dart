@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'dart:math';
-
 import 'package:sregep_productivity_app/data/repo/study_repo.dart';
+import 'package:sregep_productivity_app/ui/fonts/font_size.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -29,7 +29,7 @@ class _StatsScreenState extends State<StatsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: screenSize.height * 0.08),
+              SizedBox(height: screenSize.height * 0.06),
               _buildHeader(),
               const SizedBox(height: 10),
               const Divider(thickness: 1),
@@ -58,6 +58,48 @@ class _StatsScreenState extends State<StatsScreen> {
         ),
       ),
     );
+  }
+
+  // [ MODE LAYOUT DESKTOP, MOBILE, TABLET]
+
+  Widget _buildMobileMode(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.07),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: screenSize.height * 0.06),
+          _buildHeader(),
+          const SizedBox(height: 10),
+          const Divider(thickness: 1),
+          const SizedBox(height: 20),
+
+          _buildSectionTitle(
+            'Focus Statistic This Week',
+            'Have you reached your goals?',
+          ),
+          const SizedBox(height: 15),
+          _dropDownOptions(),
+          const SizedBox(height: 15),
+
+          _buildChartScetion(),
+          const SizedBox(height: 30),
+          const Divider(thickness: 1),
+          const SizedBox(height: 20),
+
+          _buildMoreDetailHeader(),
+          const SizedBox(height: 20),
+
+          _buildSubjectProgressList(),
+          const SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopMode(BuildContext context) {
+    return Column(children: []);
   }
 
   Widget _dropDownOptions() {
@@ -102,7 +144,7 @@ class _StatsScreenState extends State<StatsScreen> {
           "Your Stats",
           style: GoogleFonts.outfit(
             color: AppColors.accent,
-            fontSize: 42,
+            fontSize: ResponsiveText.getTitleSize(context),
             fontWeight: FontWeight.w500,
             height: 1,
           ),
@@ -111,7 +153,7 @@ class _StatsScreenState extends State<StatsScreen> {
           "Productivity stats this week",
           style: GoogleFonts.outfit(
             color: Colors.grey,
-            fontSize: 20,
+            fontSize: ResponsiveText.getSubTitleFontSize(context),
             fontWeight: FontWeight.w400,
           ),
         ),

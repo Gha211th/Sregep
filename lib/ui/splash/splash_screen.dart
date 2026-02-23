@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sregep_productivity_app/ui/Widgets/navbar/widget_navbar.dart';
+import 'package:sregep_productivity_app/ui/Widgets/navbar/adaptive_nav.dart';
 import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainNavigationMobile()),
+        MaterialPageRoute(builder: (context) => AdaptiveNavigation()),
       );
     });
   }

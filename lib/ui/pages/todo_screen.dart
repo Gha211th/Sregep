@@ -92,7 +92,7 @@ class _TodoScreenState extends State<TodoScreen> {
               const SizedBox(height: 15),
               TodoFormWidget(
                 onTodoAdded: _loadTodos,
-                primaryColor: AppColors.primary,
+                primaryColor: AppColors.accent,
               ),
               const SizedBox(height: 30),
               const Divider(thickness: 1),
@@ -104,8 +104,8 @@ class _TodoScreenState extends State<TodoScreen> {
                   _buildSectionTitle('Your Todos', 'Do you have any list?'),
                   Switch(
                     value: _isCompleted,
-                    activeTrackColor: AppColors.primary,
-                    inactiveTrackColor: AppColors.primary,
+                    activeTrackColor: AppColors.accent,
+                    inactiveTrackColor: AppColors.accent,
                     inactiveThumbColor: Colors.white,
                     onChanged: (value) {
                       setState(() {
@@ -161,7 +161,7 @@ class _TodoScreenState extends State<TodoScreen> {
         Text(
           "Your Todos",
           style: GoogleFonts.outfit(
-            color: AppColors.primary,
+            color: AppColors.accent,
             fontSize: getFontSizeForTitle(screenSize.width),
             fontWeight: FontWeight.w500,
             height: 1,
@@ -186,7 +186,7 @@ class _TodoScreenState extends State<TodoScreen> {
         Text(
           title,
           style: GoogleFonts.outfit(
-            color: AppColors.primary,
+            color: AppColors.accent,
             fontSize: 24,
             fontWeight: FontWeight.w400,
           ),

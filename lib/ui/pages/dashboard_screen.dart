@@ -335,7 +335,7 @@ class DashboardScreen extends StatelessWidget {
         Text(
           "Ready to be productive?",
           style: GoogleFonts.outfit(
-            fontSize: 20,
+            fontSize: ResponsiveText.getSubTitleFontSize(context),
             fontWeight: FontWeight.w400,
             color: const Color(0xffB3B3B3),
           ),
