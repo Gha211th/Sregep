@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sregep_productivity_app/core/constants.dart';
 
 class SideNavbar extends StatefulWidget {
   final int selectedIndex;
@@ -20,16 +21,13 @@ class _SideNavbarState extends State<SideNavbar> {
   Widget build(BuildContext context) {
     return Container(
       width: 280, // Sesuai proporsi desain desktop kamu
-      color: const Color(0xFF0077B6), // Warna biru sesuai gambar
+      color: AppColors.accent,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // LOGO SECTION
           _buildLogo(),
-
           const SizedBox(height: 60),
-
           Text(
             "View your activity:",
             style: GoogleFonts.outfit(
@@ -37,12 +35,9 @@ class _SideNavbarState extends State<SideNavbar> {
               fontSize: 14,
             ),
           ),
-
           const SizedBox(height: 20),
-
-          // MENU ITEMS
-          _navItem(index: 0, icon: Icons.bar_chart_rounded, label: "Statistic"),
-          _navItem(index: 1, icon: Icons.timer_outlined, label: "Focus Mode"),
+          _navItem(index: 0, icon: Icons.timer_outlined, label: "Focus Mode"),
+          _navItem(index: 1, icon: Icons.bar_chart_rounded, label: "Statistic"),
           _navItem(
             index: 2,
             icon: Icons.checklist_rtl_rounded,
@@ -59,11 +54,7 @@ class _SideNavbarState extends State<SideNavbar> {
       children: [
         Text(
           "Sregep.",
-          style: GoogleFonts.outfit(
-            color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
+          style: GoogleFonts.outfit(color: Colors.white, fontSize: 32),
         ),
         Text(
           "[ Focus - Study - Achieve ]",
@@ -107,7 +98,7 @@ class _SideNavbarState extends State<SideNavbar> {
                 style: GoogleFonts.outfit(
                   color: Colors.white,
                   fontSize: 16,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],

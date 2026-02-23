@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -52,27 +51,32 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildMobileMode(BuildContext context, TimerProvider provider) {
     final screenSize = MediaQuery.of(context).size;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: screenSize.height * 0.06),
-        _buildWelcomeUser(context),
-        SizedBox(height: screenSize.height * 0.04),
-        SubjectPicker(),
-        Center(
-          child: Padding(
-            padding: const EdgeInsetsGeometry.symmetric(vertical: 20),
-            child: TimerCircle(),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.03),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: screenSize.height * 0.06),
+          _buildWelcomeUser(context),
+          SizedBox(height: screenSize.height * 0.01),
+          const Divider(thickness: 1),
+          SizedBox(height: screenSize.height * 0.04),
+          SubjectPicker(),
+          Center(
+            child: Padding(
+              padding: const EdgeInsetsGeometry.symmetric(vertical: 20),
+              child: TimerCircle(),
+            ),
           ),
-        ),
-        SizedBox(height: screenSize.height * 0.01),
-        _buildTimerControls(context, provider),
-        SizedBox(height: screenSize.height * 0.04),
-        Padding(
-          padding: EdgeInsetsGeometry.all(10.0),
-          child: _buildControlButtons(provider, context),
-        ),
-      ],
+          SizedBox(height: screenSize.height * 0.01),
+          _buildTimerControls(context, provider),
+          SizedBox(height: screenSize.height * 0.04),
+          Padding(
+            padding: EdgeInsetsGeometry.all(10.0),
+            child: _buildControlButtons(provider, context),
+          ),
+        ],
+      ),
     );
   }
 
@@ -135,15 +139,19 @@ class DashboardScreen extends StatelessWidget {
                     _buildTimerControls(context, provider),
                     const SizedBox(height: 40),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenSize.width * 0.05,
+                      ),
                       child: _buildControlButtons(provider, context),
                     ),
+                    SizedBox(height: screenSize.height * 0.15),
+                    const Divider(thickness: 2),
                   ],
                 ),
               ),
-              SizedBox(width: screenSize.width * 0.06),
+              SizedBox(width: screenSize.width * 0.02),
               const VerticalDivider(thickness: 1.5),
-              SizedBox(width: screenSize.width * 0.04),
+              SizedBox(width: screenSize.width * 0.02),
               Expanded(
                 flex: 1,
                 child: Column(
@@ -324,7 +332,7 @@ class DashboardScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Hello Student",
+          "Focus Timer",
           style: GoogleFonts.outfit(
             fontSize: ResponsiveText.getTitleSize(context),
             fontWeight: FontWeight.w500,
@@ -354,12 +362,13 @@ class DashboardScreen extends StatelessWidget {
             fontSize: ResponsiveText.getMoreDetailFontSize(context),
             fontWeight: FontWeight.w500,
             color: AppColors.accent,
+            height: 1,
           ),
         ),
         Text(
           'Focus detail this week',
           style: GoogleFonts.outfit(
-            fontSize: 12,
+            fontSize: ResponsiveText.getFontForSubDetail(context),
             fontWeight: FontWeight.w400,
             color: Colors.grey,
           ),

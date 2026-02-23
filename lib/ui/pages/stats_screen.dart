@@ -19,42 +19,24 @@ class _StatsScreenState extends State<StatsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.07),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: screenSize.height * 0.06),
-              _buildHeader(),
-              const SizedBox(height: 10),
-              const Divider(thickness: 1),
-              const SizedBox(height: 20),
-
-              _buildSectionTitle(
-                'Focus Statistic This Week',
-                'Have you reached your goals?',
-              ),
-              const SizedBox(height: 15),
-              _dropDownOptions(),
-              const SizedBox(height: 15),
-
-              _buildChartScetion(),
-              const SizedBox(height: 30),
-              const Divider(thickness: 1),
-              const SizedBox(height: 20),
-
-              _buildMoreDetailHeader(),
-              const SizedBox(height: 20),
-
-              _buildSubjectProgressList(),
-              const SizedBox(height: 30),
-            ],
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth > 1000) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: _buildDesktopMode(context),
+              );
+            } else {
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: _buildMobileMode(context),
+              );
+            }
+          },
         ),
       ),
     );
@@ -65,7 +47,7 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget _buildMobileMode(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.07),
+      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.03),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -99,14 +81,62 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   Widget _buildDesktopMode(BuildContext context) {
-    return Column(children: []);
+    final screenSize = MediaQuery.of(context).size;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenSize.height * 0.06),
+        _buildHeader(),
+        SizedBox(height: screenSize.height * 0.01),
+        const Divider(thickness: 1),
+        SizedBox(height: screenSize.height * 0.03),
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionTitle(
+                      'Focus Statistic This Week',
+                      'Have you reached your goals?',
+                    ),
+                    SizedBox(height: screenSize.height * 0.01),
+                    _dropDownOptions(),
+                    SizedBox(height: screenSize.height * 0.015),
+                    _buildChartScetion(),
+                    SizedBox(height: screenSize.height * 0.03),
+                    const Divider(thickness: 1),
+                  ],
+                ),
+              ),
+              SizedBox(width: screenSize.width * 0.02),
+              const VerticalDivider(thickness: 1),
+              SizedBox(width: screenSize.width * 0.02),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildMoreDetailHeader(),
+                    SizedBox(height: screenSize.height * 0.03),
+                    _buildSubjectProgressList(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _dropDownOptions() {
     return Container(
+      height: 30,
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
         border: Border.all(color: AppColors.accent),
       ),
       child: DropdownButtonHideUnderline(
@@ -169,15 +199,16 @@ class _StatsScreenState extends State<StatsScreen> {
           title,
           style: GoogleFonts.outfit(
             color: AppColors.accent,
-            fontSize: 24,
+            fontSize: ResponsiveText.getFontSizeForStatsTitle(context),
             fontWeight: FontWeight.w400,
+            height: 1,
           ),
         ),
         Text(
           subtitle,
           style: GoogleFonts.outfit(
             color: Colors.grey,
-            fontSize: 14,
+            fontSize: ResponsiveText.getFontSizeForSubStats(context),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -210,8 +241,20 @@ class _StatsScreenState extends State<StatsScreen> {
         double calculateMaxY = maxData < 5 ? 5 : maxData + (maxData * 0.2);
         double dynamicInterval = calculateMaxY / 5;
 
+        // screenSize definition
+        final screenSize = MediaQuery.of(context).size;
+
+        // barchart height responsive mode
+        double getHeightForBar(double width) {
+          if (width >= 1600) return 550;
+          if (width >= 1200) return 450;
+          if (width >= 800) return 350;
+          if (width >= 480) return 250;
+          return 200;
+        }
+
         return Container(
-          height: 250,
+          height: getHeightForBar(screenSize.width),
           padding: const EdgeInsets.fromLTRB(10, 20, 15, 10),
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.accent, width: 1.5),
@@ -224,7 +267,11 @@ class _StatsScreenState extends State<StatsScreen> {
               minY: 0,
               barGroups: List.generate(
                 charData.length,
-                (i) => _makeBarGroup(i, charData[i], width: _getBarWidth()),
+                (i) => _makeBarGroup(
+                  i,
+                  charData[i],
+                  width: _getBarWidth(screenSize.width),
+                ),
               ),
               titlesData: _buildChartTitles(dataCount: charData.length),
               barTouchData: BarTouchData(
@@ -253,9 +300,9 @@ class _StatsScreenState extends State<StatsScreen> {
     );
   }
 
-  double _getBarWidth() {
-    if (_selectedFilter == 'Minggu Ini') return 8;
-    if (_selectedFilter == 'Bulan Ini') return 6;
+  double _getBarWidth(double width) {
+    if (width >= 1600) return 10;
+    if (width >= 800) return 8;
     return 8;
   }
 
@@ -311,7 +358,9 @@ class _StatsScreenState extends State<StatsScreen> {
               if (index >= 0 && index < days.length) {
                 return Text(
                   days[index],
-                  style: GoogleFonts.outfit(fontSize: 10),
+                  style: GoogleFonts.outfit(
+                    fontSize: ResponsiveText.getFontSizeForChart(context),
+                  ),
                 );
               }
             }
@@ -320,7 +369,9 @@ class _StatsScreenState extends State<StatsScreen> {
               if (index % 3 == 0 && index < 31) {
                 return Text(
                   "${index + 1}",
-                  style: GoogleFonts.outfit(fontSize: 9),
+                  style: GoogleFonts.outfit(
+                    fontSize: ResponsiveText.getFontSizeForDate(context),
+                  ),
                 );
               }
             }
@@ -343,7 +394,9 @@ class _StatsScreenState extends State<StatsScreen> {
               if (index >= 0 && index < month.length && index % 1 == 0) {
                 return Text(
                   month[index],
-                  style: GoogleFonts.outfit(fontSize: 9),
+                  style: GoogleFonts.outfit(
+                    fontSize: ResponsiveText.getFontSizeForChart(context),
+                  ),
                 );
               }
             }
@@ -404,27 +457,27 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   Widget _buildMoreDetailHeader() {
-    return Center(
-      child: Column(
-        children: [
-          Text(
-            "More Details",
-            style: GoogleFonts.outfit(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-              color: AppColors.accent,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "More Details",
+          style: GoogleFonts.outfit(
+            fontSize: ResponsiveText.getMoreDetailFontSize(context),
+            fontWeight: FontWeight.w500,
+            color: AppColors.accent,
+            height: 1,
           ),
-          Text(
-            'Focus detail this week',
-            style: GoogleFonts.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey,
-            ),
+        ),
+        Text(
+          'Focus detail this week',
+          style: GoogleFonts.outfit(
+            fontSize: ResponsiveText.getFontForSubDetail(context),
+            fontWeight: FontWeight.w400,
+            color: Colors.grey,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
