@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/ui/Widgets/normal_timer.dart';
@@ -12,8 +11,11 @@ import 'package:sregep_productivity_app/ui/pages/widget_universal/subject_detail
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    // double getFontForTitle(double width) {}
+
     final timerProvider = Provider.of<TimerProvider>(context);
 
     return Scaffold(
@@ -41,7 +43,6 @@ class DashboardScreen extends StatelessWidget {
 
   Widget _buildMobileMode(BuildContext context, TimerProvider provider) {
     final screenSize = MediaQuery.of(context).size;
-    final timerProvider = Provider.of<TimerProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,11 +74,11 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
         SizedBox(height: screenSize.height * 0.01),
-        _buildTimerControls(context, timerProvider),
+        _buildTimerControls(context, provider),
         SizedBox(height: screenSize.height * 0.04),
         Padding(
           padding: EdgeInsetsGeometry.all(10.0),
-          child: _buildControlButtons(timerProvider, context),
+          child: _buildControlButtons(provider, context),
         ),
       ],
     );
@@ -85,89 +86,70 @@ class DashboardScreen extends StatelessWidget {
 
   Widget _buildDesktopMode(BuildContext context, TimerProvider provider) {
     final screenSize = MediaQuery.of(context).size;
-    final timerProvider = Provider.of<TimerProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: screenSize.height * 0.08),
-        Text(
-          "Hello Student",
-          style: GoogleFonts.outfit(
-            fontSize: 42,
-            fontWeight: FontWeight.w500,
-            height: 1,
-            color: AppColors.accent,
-          ),
-        ),
-        Text("Ready to be productive?"),
         SizedBox(height: screenSize.height * 0.05),
-        const Divider(thickness: 1),
-        SizedBox(height: screenSize.height * 0.08),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              children: [
-                SubjectPicker(),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(vertical: 20),
-                    child: NormalTimer(),
-                  ),
-                ),
-                SizedBox(height: screenSize.height * 0.01),
-                _buildTimerControls(context, timerProvider),
-                SizedBox(height: screenSize.height * 0.04),
-                Padding(
-                  padding: EdgeInsetsGeometry.all(10.0),
-                  child: _buildControlButtons(timerProvider, context),
-                ),
-              ],
+            Text(
+              "Hello Student",
+              style: GoogleFonts.outfit(
+                fontSize: 64,
+                fontWeight: FontWeight.w500,
+                height: 1,
+                color: AppColors.accent,
+              ),
             ),
-            const Divider(thickness: 1),
-            Row(
-              children: [
-                _buildMoreDetailHeader(),
-                FutureBuilder<List<Map<String, dynamic>>>(
-                  future: StudyRepository().getSubjectStats(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Center(
-                        child: Text(
-                          "Belum ada statistik belajar.",
-                          style: GoogleFonts.outfit(color: Colors.grey),
-                        ),
-                      );
-                    }
-
-                    final topSubjectData = snapshot.data![0];
-                    final String subjectName = topSubjectData['subject'];
-                    final double totalDuration =
-                        (topSubjectData['total_duration'] as num).toDouble();
-
-                    double grandTotal = snapshot.data!.fold(
-                      0,
-                      (sum, item) => sum + item['total_duration'],
-                    );
-                    double progressValue = grandTotal > 0
-                        ? totalDuration / grandTotal
-                        : 0;
-
-                    return Center(
-                      child: DetailCard(
-                        title: subjectName,
-                        progress: progressValue,
-                      ),
-                    );
-                  },
-                ),
-              ],
+            Text(
+              "Ready to be productive?",
+              style: GoogleFonts.outfit(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xffB3B3B3),
+              ),
             ),
-            const Divider(thickness: 1),
           ],
+        ),
+        SizedBox(height: screenSize.height * 0.02),
+        const Divider(thickness: 1),
+        SizedBox(height: screenSize.height * 0.04),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    const SubjectPicker(),
+                    SizedBox(height: screenSize.height * 0.04),
+                    const NormalTimer(),
+                    SizedBox(height: screenSize.height * 0.04),
+                    _buildTimerControls(context, provider),
+                    SizedBox(height: screenSize.height * 0.04),
+                    _buildControlButtons(provider, context),
+                  ],
+                ),
+              ),
+              SizedBox(width: screenSize.width * 0.06),
+              const VerticalDivider(thickness: 1, color: Colors.black),
+              SizedBox(width: screenSize.width * 0.06),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildMoreDetailHeader(),
+                    const SizedBox(height: 30),
+                    _buildStatsSection(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -325,27 +307,57 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildMoreDetailHeader() {
-    return Center(
-      child: Column(
-        children: [
-          Text(
-            "More Details",
-            style: GoogleFonts.outfit(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-              color: AppColors.accent,
-            ),
+    return Column(
+      children: [
+        Text(
+          "More Details",
+          style: GoogleFonts.outfit(
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
+            color: AppColors.accent,
           ),
-          Text(
-            'Focus detail this week',
-            style: GoogleFonts.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey,
-            ),
+        ),
+        Text(
+          'Focus detail this week',
+          style: GoogleFonts.outfit(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: Colors.grey,
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatsSection() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: StudyRepository().getSubjectStats(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(
+            child: Text(
+              "Belum ada statistik belajar.",
+              style: GoogleFonts.outfit(color: Colors.grey),
+            ),
+          );
+        }
+
+        final topSubjectData = snapshot.data![0];
+        final String subjectName = topSubjectData['subject'];
+        final double totalDuration = (topSubjectData['total_duration'] as num)
+            .toDouble();
+
+        double grandTotal = snapshot.data!.fold(
+          0,
+          (sum, item) => sum + item['total_duration'],
+        );
+        double progressValue = grandTotal > 0 ? totalDuration / grandTotal : 0;
+
+        return DetailCard(title: subjectName, progress: progressValue);
+      },
     );
   }
 }

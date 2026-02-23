@@ -21,7 +21,7 @@ class TodoItemWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.accent.withOpacity(0.4), width: 2),
+        border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -33,7 +33,7 @@ class TodoItemWidget extends StatelessWidget {
                 Text(
                   todo.task ?? "",
                   style: GoogleFonts.outfit(
-                    color: AppColors.accent,
+                    color: AppColors.primary,
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
                   ),
@@ -53,13 +53,13 @@ class TodoItemWidget extends StatelessWidget {
             onPressed: onToggle,
             icon: Icon(
               todo.isCompleted ? Icons.check_circle : Icons.circle_outlined,
-              color: AppColors.accent,
+              color: AppColors.primary,
               size: 32,
             ),
           ),
           IconButton(
             onPressed: onDelete,
-            icon: Icon(Icons.delete, color: AppColors.accent, size: 32),
+            icon: Icon(Icons.delete, color: AppColors.primary, size: 32),
           ),
         ],
       ),

@@ -24,7 +24,7 @@ class SubjectPicker extends StatelessWidget {
           style: GoogleFonts.outfit(
             fontSize: 20,
             fontWeight: FontWeight.w500,
-            color: AppColors.accent,
+            color: AppColors.primary,
           ),
         ),
         Text(
@@ -42,7 +42,7 @@ class SubjectPicker extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.accent, width: 1),
+            border: Border.all(color: AppColors.primary, width: 1),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
@@ -57,7 +57,13 @@ class SubjectPicker extends StatelessWidget {
               items: subjects.map((String subject) {
                 return DropdownMenuItem<String>(
                   value: subject,
-                  child: Text("Mapel: $subject", style: GoogleFonts.outfit(fontSize: 14, color: AppColors.accent)),
+                  child: Text(
+                    "Mapel: $subject",
+                    style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      color: AppColors.primary,
+                    ),
+                  ),
                 );
               }).toList(),
               onChanged: (String? newValue) {

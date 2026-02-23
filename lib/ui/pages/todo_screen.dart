@@ -57,7 +57,7 @@ class _TodoScreenState extends State<TodoScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Item has been deleted'),
-          backgroundColor: AppColors.accent,
+          backgroundColor: AppColors.primary,
         ),
       );
     }
@@ -70,7 +70,6 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -93,7 +92,7 @@ class _TodoScreenState extends State<TodoScreen> {
               const SizedBox(height: 15),
               TodoFormWidget(
                 onTodoAdded: _loadTodos,
-                primaryColor: AppColors.accent,
+                primaryColor: AppColors.primary,
               ),
               const SizedBox(height: 30),
               const Divider(thickness: 1),
@@ -105,8 +104,8 @@ class _TodoScreenState extends State<TodoScreen> {
                   _buildSectionTitle('Your Todos', 'Do you have any list?'),
                   Switch(
                     value: _isCompleted,
-                    activeTrackColor: AppColors.accent,
-                    inactiveTrackColor: AppColors.accent,
+                    activeTrackColor: AppColors.primary,
+                    inactiveTrackColor: AppColors.primary,
                     inactiveThumbColor: Colors.white,
                     onChanged: (value) {
                       setState(() {
@@ -154,7 +153,6 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   Widget _buildHeader() {
-    
     final screenSize = MediaQuery.of(context).size;
 
     return Column(
@@ -163,7 +161,7 @@ class _TodoScreenState extends State<TodoScreen> {
         Text(
           "Your Todos",
           style: GoogleFonts.outfit(
-            color: AppColors.accent,
+            color: AppColors.primary,
             fontSize: getFontSizeForTitle(screenSize.width),
             fontWeight: FontWeight.w500,
             height: 1,
@@ -188,7 +186,7 @@ class _TodoScreenState extends State<TodoScreen> {
         Text(
           title,
           style: GoogleFonts.outfit(
-            color: AppColors.accent,
+            color: AppColors.primary,
             fontSize: 24,
             fontWeight: FontWeight.w400,
           ),

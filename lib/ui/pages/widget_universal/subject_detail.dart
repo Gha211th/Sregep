@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 
 class DetailCard extends StatelessWidget {
-  
   final String title;
   final double progress;
 
@@ -45,8 +44,6 @@ class DetailCard extends StatelessWidget {
           ),
         ],
       ),
-    ); 
+    );
   }
 }
-
-

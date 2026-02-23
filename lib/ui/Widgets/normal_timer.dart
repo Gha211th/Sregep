@@ -17,13 +17,11 @@ class NormalTimer extends StatelessWidget {
           timerProvider.timeString,
           style: GoogleFonts.outfit(
             color: AppColors.accent,
-            fontSize: 42,
+            fontSize: 70,
             fontWeight: FontWeight.w500,
           ),
-        )
+        ),
       ],
     );
   }
 }
-
-
