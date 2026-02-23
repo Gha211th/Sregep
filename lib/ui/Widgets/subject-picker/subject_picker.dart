@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
-import '../../../providers/timer_provider.dart';
+import '../../../../providers/timer_provider.dart';
 
 class SubjectPicker extends StatelessWidget {
   const SubjectPicker({super.key});
@@ -24,7 +24,7 @@ class SubjectPicker extends StatelessWidget {
           style: GoogleFonts.outfit(
             fontSize: 20,
             fontWeight: FontWeight.w500,
-            color: AppColors.primary,
+            color: AppColors.accent,
           ),
         ),
         Text(
@@ -42,7 +42,7 @@ class SubjectPicker extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.primary, width: 1),
+            border: Border.all(color: AppColors.accent, width: 1),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
@@ -61,7 +61,7 @@ class SubjectPicker extends StatelessWidget {
                     "Mapel: $subject",
                     style: GoogleFonts.outfit(
                       fontSize: 14,
-                      color: AppColors.primary,
+                      color: AppColors.accent,
                     ),
                   ),
                 );

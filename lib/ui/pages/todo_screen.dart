@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sregep_productivity_app/data/models/todo_model.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/data/repo/todo_repo.dart';
-import 'package:sregep_productivity_app/ui/Widgets/todo_form_widget.dart';
-import 'package:sregep_productivity_app/ui/Widgets/todo_item_widget.dart';
+import 'package:sregep_productivity_app/ui/Widgets/todo-widget/todo_form_widget.dart';
+import 'package:sregep_productivity_app/ui/Widgets/todo-widget/todo_item_widget.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});

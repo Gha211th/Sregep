@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../providers/timer_provider.dart';
+import '../../../../providers/timer_provider.dart';
 
 class TimerCircle extends StatelessWidget {
   const TimerCircle({super.key});
@@ -13,15 +13,15 @@ class TimerCircle extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        double diameter = constraints.maxWidth * 0.6;
+        double diameter = constraints.maxWidth * 0.65;
         double strokeWidth = diameter * 0.05;
 
         return Column(
           children: [
             SizedBox(height: screenWidth.height * 0.04),
             Container(
-              width: diameter + 10,
-              height: diameter + 10,
+              width: diameter + 20,
+              height: diameter + 20,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,

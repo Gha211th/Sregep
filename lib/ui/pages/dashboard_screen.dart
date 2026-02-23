@@ -1,21 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sregep_productivity_app/core/constants.dart';
-import 'package:sregep_productivity_app/ui/Widgets/normal_timer.dart';
-import 'package:sregep_productivity_app/ui/Widgets/subject_picker.dart';
-import 'package:sregep_productivity_app/ui/Widgets/timer_circle.dart';
+import 'package:sregep_productivity_app/ui/Widgets/timer/normal_timer.dart';
+import 'package:sregep_productivity_app/ui/Widgets/subject-picker/subject_picker.dart';
+import 'package:sregep_productivity_app/ui/Widgets/timer/timer_circle-tablet.dart';
+import 'package:sregep_productivity_app/ui/Widgets/timer/timer_circle.dart';
 import 'package:sregep_productivity_app/providers/timer_provider.dart';
 import 'package:sregep_productivity_app/data/repo/study_repo.dart';
-import 'package:sregep_productivity_app/ui/pages/widget_universal/subject_detail.dart';
+import 'package:sregep_productivity_app/ui/pages/card-detail/subject_detail.dart';
+import 'package:sregep_productivity_app/ui/fonts/font_size.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // double getFontForTitle(double width) {}
-
     final timerProvider = Provider.of<TimerProvider>(context);
 
     return Scaffold(
@@ -23,10 +24,17 @@ class DashboardScreen extends StatelessWidget {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            if (constraints.maxWidth > 900) {
+            if (constraints.maxWidth > 1000) {
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: _buildDesktopMode(context, timerProvider),
+              );
+            }
+            if (constraints.maxWidth > 600) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                physics: const BouncingScrollPhysics(),
+                child: _buildTabletMode(context, timerProvider),
               );
             } else {
               return SingleChildScrollView(
@@ -45,27 +53,11 @@ class DashboardScreen extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: screenSize.height * 0.08),
-        Text(
-          "Hello Student",
-          style: GoogleFonts.outfit(
-            fontSize: 42,
-            fontWeight: FontWeight.w500,
-            height: 1,
-            color: AppColors.accent,
-          ),
-        ),
-        Text(
-          "Ready to be productive?",
-          style: GoogleFonts.outfit(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-            color: Color(0xffB3B3B3),
-          ),
-        ),
-        SizedBox(height: screenSize.height * 0.08),
+        SizedBox(height: screenSize.height * 0.06),
+        _buildWelcomeUser(context),
+        SizedBox(height: screenSize.height * 0.04),
         SubjectPicker(),
         Center(
           child: Padding(
@@ -84,35 +76,44 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildTabletMode(BuildContext context, TimerProvider provider) {
+    final screenSize = MediaQuery.of(context).size;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenSize.height * 0.06),
+        _buildWelcomeUser(context),
+        SizedBox(height: screenSize.height * 0.04),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: SubjectPicker(),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsetsGeometry.symmetric(vertical: 15),
+            child: TimerCircleTablet(),
+          ),
+        ),
+        SizedBox(height: screenSize.height * 0.03),
+        _buildTimerControls(context, provider),
+        SizedBox(height: screenSize.height * 0.04),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40),
+          child: _buildControlButtons(provider, context),
+        ),
+      ],
+    );
+  }
+
   Widget _buildDesktopMode(BuildContext context, TimerProvider provider) {
     final screenSize = MediaQuery.of(context).size;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: screenSize.height * 0.05),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Hello Student",
-              style: GoogleFonts.outfit(
-                fontSize: 64,
-                fontWeight: FontWeight.w500,
-                height: 1,
-                color: AppColors.accent,
-              ),
-            ),
-            Text(
-              "Ready to be productive?",
-              style: GoogleFonts.outfit(
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                color: const Color(0xffB3B3B3),
-              ),
-            ),
-          ],
-        ),
+        SizedBox(height: screenSize.height * 0.06),
+        _buildWelcomeUser(context),
         SizedBox(height: screenSize.height * 0.02),
         const Divider(thickness: 1),
         SizedBox(height: screenSize.height * 0.04),
@@ -121,28 +122,34 @@ class DashboardScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Column(
                   children: [
-                    const SubjectPicker(),
-                    SizedBox(height: screenSize.height * 0.04),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: const SubjectPicker(),
+                    ),
+                    SizedBox(height: screenSize.height * 0.06),
                     const NormalTimer(),
                     SizedBox(height: screenSize.height * 0.04),
                     _buildTimerControls(context, provider),
-                    SizedBox(height: screenSize.height * 0.04),
-                    _buildControlButtons(provider, context),
+                    const SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: _buildControlButtons(provider, context),
+                    ),
                   ],
                 ),
               ),
               SizedBox(width: screenSize.width * 0.06),
-              const VerticalDivider(thickness: 1, color: Colors.black),
-              SizedBox(width: screenSize.width * 0.06),
+              const VerticalDivider(thickness: 1.5),
+              SizedBox(width: screenSize.width * 0.04),
               Expanded(
                 flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildMoreDetailHeader(),
+                    _buildMoreDetailHeader(context),
                     const SizedBox(height: 30),
                     _buildStatsSection(),
                   ],
@@ -154,6 +161,8 @@ class DashboardScreen extends StatelessWidget {
       ],
     );
   }
+
+  // [ WIDGET CONTROL BUTTON BUAT TIMER ]
 
   Widget _buildControlButtons(TimerProvider provider, BuildContext context) {
     final studyRepo = StudyRepository();
@@ -298,6 +307,8 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  // [ BUAT STYLING DASAR ]
+
   Widget _timeActionButton({required IconData icon, VoidCallback? onPressed}) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(shape: const CircleBorder()),
@@ -306,13 +317,41 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMoreDetailHeader() {
+  // [ WIDGET TEXT, TITLE DAN KAWAN-KAWAN ]
+
+  Widget _buildWelcomeUser(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Hello Student",
+          style: GoogleFonts.outfit(
+            fontSize: ResponsiveText.getTitleSize(context),
+            fontWeight: FontWeight.w500,
+            height: 1,
+            color: AppColors.accent,
+          ),
+        ),
+        Text(
+          "Ready to be productive?",
+          style: GoogleFonts.outfit(
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            color: const Color(0xffB3B3B3),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMoreDetailHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "More Details",
           style: GoogleFonts.outfit(
-            fontSize: 24,
+            fontSize: ResponsiveText.getMoreDetailFontSize(context),
             fontWeight: FontWeight.w500,
             color: AppColors.accent,
           ),
@@ -328,6 +367,8 @@ class DashboardScreen extends StatelessWidget {
       ],
     );
   }
+
+  // [ WIDGET STATISTIK BELAJAR ]
 
   Widget _buildStatsSection() {
     return FutureBuilder<List<Map<String, dynamic>>>(
@@ -345,18 +386,32 @@ class DashboardScreen extends StatelessWidget {
           );
         }
 
-        final topSubjectData = snapshot.data![0];
-        final String subjectName = topSubjectData['subject'];
-        final double totalDuration = (topSubjectData['total_duration'] as num)
-            .toDouble();
-
+        // 1. Hitung total durasi seluruhnya untuk kalkulasi progress bar %
         double grandTotal = snapshot.data!.fold(
           0,
-          (sum, item) => sum + item['total_duration'],
+          (sum, item) => sum + (item['total_duration'] as num).toDouble(),
         );
-        double progressValue = grandTotal > 0 ? totalDuration / grandTotal : 0;
 
-        return DetailCard(title: subjectName, progress: progressValue);
+        // 2. Gunakan Column atau ListView untuk menampilkan SEMUA data
+        return Column(
+          children: snapshot.data!.map((data) {
+            final String subjectName = data['subject'];
+            final double totalDuration = (data['total_duration'] as num)
+                .toDouble();
+
+            // Kalkulasi progress relatif terhadap total keseluruhan
+            double progressValue = grandTotal > 0
+                ? totalDuration / grandTotal
+                : 0;
+
+            return Padding(
+              padding: const EdgeInsets.only(
+                bottom: 12.0,
+              ), // Beri jarak antar card
+              child: DetailCard(title: subjectName, progress: progressValue),
+            );
+          }).toList(),
+        );
       },
     );
   }
