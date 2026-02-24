@@ -20,7 +20,7 @@ class _SideNavbarState extends State<SideNavbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 280, // Sesuai proporsi desain desktop kamu
+      width: 280,
       color: AppColors.accent,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Column(

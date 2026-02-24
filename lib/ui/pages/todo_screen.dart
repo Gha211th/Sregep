@@ -17,6 +17,9 @@ class _TodoScreenState extends State<TodoScreen> {
   bool _isCompleted = false;
   List<TodoModel> _todos = [];
 
+  String _searchQuery = "";
+  List<TodoModel> _filteredTodos = [];
+
   double getFontSizeForTitle(double width) {
     if (width >= 1600) return 64;
     if (width >= 1200) return 48;
@@ -41,10 +44,34 @@ class _TodoScreenState extends State<TodoScreen> {
     _loadTodos();
   }
 
+  void _runFilter(String enteredKeyword) {
+    List<TodoModel> result = [];
+
+    if (enteredKeyword.isEmpty) {
+      result = _todos;
+    } else {
+      result = _todos
+          .where(
+            (todo) =>
+                todo.task.toLowerCase().contains(enteredKeyword.toLowerCase()),
+          )
+          .toList();
+    }
+
+    setState(() {
+      _filteredTodos = result;
+    });
+  }
+
   Future<void> _loadTodos() async {
     final data = await _todoRepo.queryTodos(_isCompleted);
     setState(() {
       _todos = data.map((item) => TodoModel.fromMap(item)).toList();
+      if (_searchQuery.isEmpty) {
+        _filteredTodos = _todos;
+      } else {
+        _runFilter(_searchQuery);
+      }
     });
   }
 
@@ -116,14 +143,14 @@ class _TodoScreenState extends State<TodoScreen> {
                   ),
                 ],
               ),
+              _buildSearchBar(),
               const SizedBox(height: 20),
-
-              _todos.isEmpty
+              _filteredTodos.isEmpty
                   ? Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 30),
                         child: Text(
-                          "No task found here:(",
+                          "No task found :(",
                           style: GoogleFonts.outfit(
                             fontSize: 18,
                             color: Colors.grey,
@@ -134,9 +161,9 @@ class _TodoScreenState extends State<TodoScreen> {
                   : ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _todos.length,
+                      itemCount: _filteredTodos.length,
                       itemBuilder: (context, index) {
-                        final todo = _todos[index];
+                        final todo = _filteredTodos[index];
                         return TodoItemWidget(
                           todo: todo,
                           onToggle: () => handleToggle(todo),
@@ -200,6 +227,41 @@ class _TodoScreenState extends State<TodoScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  // BUILD SEARCH QUERY
+
+  Widget _buildSearchBar() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: TextField(
+        onChanged: (value) {
+          setState(() {
+            _searchQuery = value;
+
+            if (value.isEmpty) {
+              _filteredTodos = _todos;
+            } else {
+              _filteredTodos = _todos
+                  .where(
+                    (todo) =>
+                        todo.task.toLowerCase().contains(value.toLowerCase()),
+                  )
+                  .toList();
+            }
+          });
+        },
+        decoration: InputDecoration(
+          hintText: "Search any task..",
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+        ),
+      ),
     );
   }
 }
