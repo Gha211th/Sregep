@@ -5,6 +5,7 @@ import 'package:sregep_productivity_app/core/constants.dart';
 import 'package:sregep_productivity_app/data/repo/todo_repo.dart';
 import 'package:sregep_productivity_app/ui/Widgets/todo-widget/todo_form_widget.dart';
 import 'package:sregep_productivity_app/ui/Widgets/todo-widget/todo_item_widget.dart';
+import 'package:sregep_productivity_app/ui/fonts/font_size.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -97,85 +98,166 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: screenSize.height * 0.08),
-              _buildHeader(),
-              const SizedBox(height: 10),
-              const Divider(thickness: 1),
-              const SizedBox(height: 20),
-              _buildSectionTitle(
-                'Add your todo~',
-                'Do you have any todo list?',
-              ),
-              const SizedBox(height: 15),
-              TodoFormWidget(
-                onTodoAdded: _loadTodos,
-                primaryColor: AppColors.accent,
-              ),
-              const SizedBox(height: 30),
-              const Divider(thickness: 1),
-              const SizedBox(height: 20),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth > 1000) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: _buildDesktopMode(),
+              );
+            } else {
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: _buildMobileMode(),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildSectionTitle('Your Todos', 'Do you have any list?'),
-                  Switch(
-                    value: _isCompleted,
-                    activeTrackColor: AppColors.accent,
-                    inactiveTrackColor: AppColors.accent,
-                    inactiveThumbColor: Colors.white,
-                    onChanged: (value) {
-                      setState(() {
-                        _isCompleted = value;
-                      });
-                      _loadTodos();
-                    },
+  // WIDGET UNTUK KONDISI DEKTOP, MOBILE, DAN TABLET
+
+  Widget _buildMobileMode() {
+    final screenSize = MediaQuery.of(context).size;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenSize.height * 0.08),
+        _buildHeader(),
+        SizedBox(height: screenSize.height * 0.02),
+        const Divider(thickness: 1),
+        const SizedBox(height: 10),
+        _buildSearchBar(),
+        const SizedBox(height: 10),
+        const Divider(thickness: 1),
+        const SizedBox(height: 20),
+        _buildSectionTitle('Add your todo~', 'Do you have any todo list?'),
+        const SizedBox(height: 15),
+        TodoFormWidget(onTodoAdded: _loadTodos, primaryColor: AppColors.accent),
+        const SizedBox(height: 30),
+        const Divider(thickness: 1),
+        const SizedBox(height: 20),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildSectionTitle('Your Todos', 'Do you have any list?'),
+            Switch(
+              value: _isCompleted,
+              activeTrackColor: AppColors.accent,
+              inactiveTrackColor: AppColors.accent,
+              inactiveThumbColor: Colors.white,
+              onChanged: (value) {
+                setState(() {
+                  _isCompleted = value;
+                });
+                _loadTodos();
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        _filteredTodos.isEmpty
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Text(
+                    "No task found :(",
+                    style: GoogleFonts.outfit(fontSize: 18, color: Colors.grey),
                   ),
-                ],
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _filteredTodos.length,
+                itemBuilder: (context, index) {
+                  final todo = _filteredTodos[index];
+                  return TodoItemWidget(
+                    todo: todo,
+                    onToggle: () => handleToggle(todo),
+                    onDelete: () => handleDelete(todo.id!),
+                  );
+                },
               ),
-              _buildSearchBar(),
-              const SizedBox(height: 20),
-              _filteredTodos.isEmpty
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Text(
-                          "No task found :(",
-                          style: GoogleFonts.outfit(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _filteredTodos.length,
-                      itemBuilder: (context, index) {
-                        final todo = _filteredTodos[index];
-                        return TodoItemWidget(
-                          todo: todo,
-                          onToggle: () => handleToggle(todo),
-                          onDelete: () => handleDelete(todo.id!),
-                        );
-                      },
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
+  Widget _buildDesktopMode() {
+    final screenSize = MediaQuery.of(context).size;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenSize.height * 0.06),
+        _buildHeader(),
+        SizedBox(height: screenSize.height * 0.01),
+        const Divider(thickness: 1),
+        SizedBox(height: screenSize.height * 0.01),
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSearchBar(),
+                    SizedBox(height: screenSize.height * 0.03),
+                    const Divider(thickness: 1),
+                    SizedBox(height: screenSize.height * 0.03),
+                    _buildSectionTitle(
+                      'Add your todo~',
+                      'Do you have any todo list?',
                     ),
-              const SizedBox(height: 20),
+                    const SizedBox(height: 15),
+                    TodoFormWidget(
+                      onTodoAdded: _loadTodos,
+                      primaryColor: AppColors.accent,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: screenSize.width * 0.02),
+              const VerticalDivider(thickness: 1),
+              SizedBox(width: screenSize.width * 0.02),
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildSectionTitle(
+                          'Your Todos',
+                          'Do you have any list?',
+                        ),
+                        Switch(
+                          value: _isCompleted,
+                          activeTrackColor: AppColors.accent,
+                          inactiveTrackColor: AppColors.accent,
+                          inactiveThumbColor: Colors.white,
+                          onChanged: (value) {
+                            setState(() {
+                              _isCompleted = value;
+                            });
+                            _loadTodos();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -198,7 +280,7 @@ class _TodoScreenState extends State<TodoScreen> {
           "Schdule your todos",
           style: GoogleFonts.outfit(
             color: Colors.grey,
-            fontSize: getFontSizeForTitle(screenSize.width),
+            fontSize: ResponsiveText.getSubTitleFontSize(context),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -214,15 +296,16 @@ class _TodoScreenState extends State<TodoScreen> {
           title,
           style: GoogleFonts.outfit(
             color: AppColors.accent,
-            fontSize: 24,
+            fontSize: ResponsiveText.getFontSizeForStatsTitle(context),
             fontWeight: FontWeight.w400,
+            height: 1,
           ),
         ),
         Text(
           subtitle,
           style: GoogleFonts.outfit(
             color: Colors.grey,
-            fontSize: 14,
+            fontSize: ResponsiveText.getFontSizeForSubStats(context),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -233,35 +316,60 @@ class _TodoScreenState extends State<TodoScreen> {
   // BUILD SEARCH QUERY
 
   Widget _buildSearchBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: TextField(
-        onChanged: (value) {
-          setState(() {
-            _searchQuery = value;
-
-            if (value.isEmpty) {
-              _filteredTodos = _todos;
-            } else {
-              _filteredTodos = _todos
-                  .where(
-                    (todo) =>
-                        todo.task.toLowerCase().contains(value.toLowerCase()),
-                  )
-                  .toList();
-            }
-          });
-        },
-        decoration: InputDecoration(
-          hintText: "Search any task..",
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Search Your Todos",
+          style: GoogleFonts.outfit(
+            fontSize: ResponsiveText.getFontSizeForStatsTitle(context),
+            color: AppColors.accent,
+          ),
         ),
-      ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.accent, width: 2),
+          ),
+          child: TextField(
+            onChanged: (value) {
+              setState(() {
+                _searchQuery = value;
+
+                if (value.isEmpty) {
+                  _filteredTodos = _todos;
+                } else {
+                  _filteredTodos = _todos
+                      .where(
+                        (todo) => todo.task.toLowerCase().contains(
+                          value.toLowerCase(),
+                        ),
+                      )
+                      .toList();
+                }
+              });
+            },
+            textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+              hintText: "Search any task..",
+              hintStyle: GoogleFonts.outfit(
+                fontSize: ResponsiveText.getFontSizeForSeacrhBar(context),
+                color: Colors.grey,
+              ),
+              border: InputBorder.none,
+              prefixIcon: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 12),
+                child: Icon(Icons.search, size: 25, color: Colors.grey),
+              ),
+              prefixIconConstraints: const BoxConstraints(
+                minHeight: 40,
+                minWidth: 40,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

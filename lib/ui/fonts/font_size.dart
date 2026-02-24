@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class ResponsiveText {
   static double getTitleSize(BuildContext context) {
@@ -76,5 +75,17 @@ class ResponsiveText {
     if (width >= 800) return 11;
     if (width >= 480) return 10;
     return 9;
+  }
+
+  // FOR SEARCH BAR
+
+  static double getFontSizeForSeacrhBar(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    if (width >= 1600) return 18;
+    if (width >= 1200) return 16;
+    if (width >= 800) return 16;
+    if (width >= 480) return 14;
+    return 14;
   }
 }
