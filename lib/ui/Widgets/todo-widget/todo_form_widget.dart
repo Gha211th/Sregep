@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:sregep_productivity_app/data/repo/todo_repo.dart';
+import 'package:sregep_productivity_app/ui/fonts/font_size.dart';
+import 'package:sregep_productivity_app/ui/padding/padding_size.dart';
 
 class TodoFormWidget extends StatefulWidget {
   final VoidCallback onTodoAdded;
@@ -64,8 +66,12 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(
+        horizontal: PaddingSize.getPaddingHor(context),
+        vertical: PaddingSize.getPaddingVer(context),
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: widget.primaryColor, width: 2),
@@ -79,7 +85,7 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
             controller: _nameController,
             hint: "Enter your todo name",
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: screenSize.height * 0.03),
           _buildLabel("Add Date"),
           _buildTextField(
             controller: _dateController,
@@ -87,7 +93,7 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
             readOnly: true,
             onTap: _pickDate,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: screenSize.height * 0.025),
           SizedBox(
             width: double.infinity,
             height: 48,
@@ -123,7 +129,8 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
         style: GoogleFonts.outfit(
           color: widget.primaryColor,
           fontWeight: FontWeight.w500,
-          fontSize: 16,
+          fontSize: ResponsiveText.getFontSizeForLabel(context),
+          height: 1,
         ),
       ),
     );
@@ -143,12 +150,12 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
         hintText: hint,
         hintStyle: GoogleFonts.outfit(
           color: Colors.grey.shade400,
-          fontSize: 14,
+          fontSize: ResponsiveText.getFontSizeForSeacrhBar(context),
           fontWeight: FontWeight.w400,
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 10,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: PaddingSize.getPaddingTextConHor(context),
+          vertical: 20,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),

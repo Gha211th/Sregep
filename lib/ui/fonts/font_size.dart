@@ -88,4 +88,15 @@ class ResponsiveText {
     if (width >= 480) return 14;
     return 14;
   }
+
+  // FOR LABEL TODO FORM
+
+  static double getFontSizeForLabel(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    if (width >= 1600) return 20;
+    if (width >= 1200) return 18;
+    if (width >= 800) return 16;
+    return 14;
+  }
 }

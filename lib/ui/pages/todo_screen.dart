@@ -128,7 +128,7 @@ class _TodoScreenState extends State<TodoScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: screenSize.height * 0.08),
+        SizedBox(height: screenSize.height * 0.06),
         _buildHeader(),
         SizedBox(height: screenSize.height * 0.02),
         const Divider(thickness: 1),
@@ -193,18 +193,21 @@ class _TodoScreenState extends State<TodoScreen> {
 
   Widget _buildDesktopMode() {
     final screenSize = MediaQuery.of(context).size;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: screenSize.height * 0.06),
-        _buildHeader(),
-        SizedBox(height: screenSize.height * 0.01),
-        const Divider(thickness: 1),
-        SizedBox(height: screenSize.height * 0.01),
-        IntrinsicHeight(
-          child: Row(
+    return Padding(
+      padding: EdgeInsets.only(left: screenSize.width * 0.01),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: screenSize.height * 0.06),
+          _buildHeader(),
+          SizedBox(height: screenSize.height * 0.01),
+          const Divider(thickness: 1),
+          SizedBox(height: screenSize.height * 0.01),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
+                flex: 2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -224,11 +227,20 @@ class _TodoScreenState extends State<TodoScreen> {
                   ],
                 ),
               ),
-              SizedBox(width: screenSize.width * 0.02),
-              const VerticalDivider(thickness: 1),
-              SizedBox(width: screenSize.width * 0.02),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenSize.width * 0.02,
+                ),
+                child: Container(
+                  height: screenSize.height * 0.7,
+                  width: 1,
+                  color: Colors.grey,
+                ),
+              ),
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,8 +252,6 @@ class _TodoScreenState extends State<TodoScreen> {
                         Switch(
                           value: _isCompleted,
                           activeTrackColor: AppColors.accent,
-                          inactiveTrackColor: AppColors.accent,
-                          inactiveThumbColor: Colors.white,
                           onChanged: (value) {
                             setState(() {
                               _isCompleted = value;
@@ -251,13 +261,40 @@ class _TodoScreenState extends State<TodoScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 20),
+                    _filteredTodos.isEmpty
+                        ? Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 50),
+                              child: Text(
+                                "No task found :(",
+                                style: GoogleFonts.outfit(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _filteredTodos.length,
+                            itemBuilder: (context, index) {
+                              final todo = _filteredTodos[index];
+                              return TodoItemWidget(
+                                todo: todo,
+                                onToggle: () => handleToggle(todo),
+                                onDelete: () => handleDelete(todo.id!),
+                              );
+                            },
+                          ),
                   ],
                 ),
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

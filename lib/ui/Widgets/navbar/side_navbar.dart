@@ -21,7 +21,7 @@ class _SideNavbarState extends State<SideNavbar> {
   Widget build(BuildContext context) {
     return Container(
       width: 280,
-      color: AppColors.accent,
+      color: AppColors.primary,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

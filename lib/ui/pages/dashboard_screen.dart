@@ -51,8 +51,37 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildMobileMode(BuildContext context, TimerProvider provider) {
     final screenSize = MediaQuery.of(context).size;
 
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: screenSize.height * 0.06),
+        _buildWelcomeUser(context),
+        SizedBox(height: screenSize.height * 0.01),
+        const Divider(thickness: 1),
+        SizedBox(height: screenSize.height * 0.04),
+        SubjectPicker(),
+        Center(
+          child: Padding(
+            padding: const EdgeInsetsGeometry.symmetric(vertical: 20),
+            child: TimerCircle(),
+          ),
+        ),
+        SizedBox(height: screenSize.height * 0.01),
+        _buildTimerControls(context, provider),
+        SizedBox(height: screenSize.height * 0.04),
+        Padding(
+          padding: EdgeInsetsGeometry.all(10.0),
+          child: _buildControlButtons(provider, context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTabletMode(BuildContext context, TimerProvider provider) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.03),
+      padding: EdgeInsets.only(left: screenSize.width * 0.03),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -61,18 +90,21 @@ class DashboardScreen extends StatelessWidget {
           SizedBox(height: screenSize.height * 0.01),
           const Divider(thickness: 1),
           SizedBox(height: screenSize.height * 0.04),
-          SubjectPicker(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: SubjectPicker(),
+          ),
           Center(
             child: Padding(
-              padding: const EdgeInsetsGeometry.symmetric(vertical: 20),
-              child: TimerCircle(),
+              padding: const EdgeInsetsGeometry.symmetric(vertical: 15),
+              child: TimerCircleTablet(),
             ),
           ),
-          SizedBox(height: screenSize.height * 0.01),
+          SizedBox(height: screenSize.height * 0.03),
           _buildTimerControls(context, provider),
           SizedBox(height: screenSize.height * 0.04),
           Padding(
-            padding: EdgeInsetsGeometry.all(10.0),
+            padding: EdgeInsets.symmetric(horizontal: 40),
             child: _buildControlButtons(provider, context),
           ),
         ],
@@ -80,93 +112,66 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTabletMode(BuildContext context, TimerProvider provider) {
-    final screenSize = MediaQuery.of(context).size;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: screenSize.height * 0.06),
-        _buildWelcomeUser(context),
-        SizedBox(height: screenSize.height * 0.04),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: SubjectPicker(),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsetsGeometry.symmetric(vertical: 15),
-            child: TimerCircleTablet(),
-          ),
-        ),
-        SizedBox(height: screenSize.height * 0.03),
-        _buildTimerControls(context, provider),
-        SizedBox(height: screenSize.height * 0.04),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40),
-          child: _buildControlButtons(provider, context),
-        ),
-      ],
-    );
-  }
-
   Widget _buildDesktopMode(BuildContext context, TimerProvider provider) {
     final screenSize = MediaQuery.of(context).size;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: screenSize.height * 0.06),
-        _buildWelcomeUser(context),
-        SizedBox(height: screenSize.height * 0.02),
-        const Divider(thickness: 1),
-        SizedBox(height: screenSize.height * 0.04),
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: const SubjectPicker(),
-                    ),
-                    SizedBox(height: screenSize.height * 0.06),
-                    const NormalTimer(),
-                    SizedBox(height: screenSize.height * 0.04),
-                    _buildTimerControls(context, provider),
-                    const SizedBox(height: 40),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: screenSize.width * 0.05,
+    return Padding(
+      padding: EdgeInsets.only(left: screenSize.width * 0.01),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: screenSize.height * 0.06),
+          _buildWelcomeUser(context),
+          SizedBox(height: screenSize.height * 0.02),
+          const Divider(thickness: 1),
+          SizedBox(height: screenSize.height * 0.04),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: const SubjectPicker(),
                       ),
-                      child: _buildControlButtons(provider, context),
-                    ),
-                    SizedBox(height: screenSize.height * 0.15),
-                    const Divider(thickness: 2),
-                  ],
+                      SizedBox(height: screenSize.height * 0.06),
+                      const NormalTimer(),
+                      SizedBox(height: screenSize.height * 0.04),
+                      _buildTimerControls(context, provider),
+                      const SizedBox(height: 40),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenSize.width * 0.05,
+                        ),
+                        child: _buildControlButtons(provider, context),
+                      ),
+                      SizedBox(height: screenSize.height * 0.15),
+                      const Divider(thickness: 2),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: screenSize.width * 0.02),
-              const VerticalDivider(thickness: 1.5),
-              SizedBox(width: screenSize.width * 0.02),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildMoreDetailHeader(context),
-                    const SizedBox(height: 30),
-                    _buildStatsSection(),
-                  ],
+                SizedBox(width: screenSize.width * 0.02),
+                const VerticalDivider(thickness: 1.5),
+                SizedBox(width: screenSize.width * 0.02),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildMoreDetailHeader(context),
+                      const SizedBox(height: 30),
+                      _buildStatsSection(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

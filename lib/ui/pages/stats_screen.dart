@@ -47,7 +47,6 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget _buildMobileMode(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.03),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -82,52 +81,55 @@ class _StatsScreenState extends State<StatsScreen> {
 
   Widget _buildDesktopMode(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: screenSize.height * 0.06),
-        _buildHeader(),
-        SizedBox(height: screenSize.height * 0.01),
-        const Divider(thickness: 1),
-        SizedBox(height: screenSize.height * 0.03),
-        IntrinsicHeight(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSectionTitle(
-                      'Focus Statistic This Week',
-                      'Have you reached your goals?',
-                    ),
-                    SizedBox(height: screenSize.height * 0.01),
-                    _dropDownOptions(),
-                    SizedBox(height: screenSize.height * 0.015),
-                    _buildChartScetion(),
-                    SizedBox(height: screenSize.height * 0.03),
-                    const Divider(thickness: 1),
-                  ],
+    return Padding(
+      padding: EdgeInsets.only(left: screenSize.width * 0.01),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: screenSize.height * 0.06),
+          _buildHeader(),
+          SizedBox(height: screenSize.height * 0.01),
+          const Divider(thickness: 1),
+          SizedBox(height: screenSize.height * 0.03),
+          IntrinsicHeight(
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSectionTitle(
+                        'Focus Statistic This Week',
+                        'Have you reached your goals?',
+                      ),
+                      SizedBox(height: screenSize.height * 0.01),
+                      _dropDownOptions(),
+                      SizedBox(height: screenSize.height * 0.015),
+                      _buildChartScetion(),
+                      SizedBox(height: screenSize.height * 0.03),
+                      const Divider(thickness: 1),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: screenSize.width * 0.02),
-              const VerticalDivider(thickness: 1),
-              SizedBox(width: screenSize.width * 0.02),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildMoreDetailHeader(),
-                    SizedBox(height: screenSize.height * 0.03),
-                    _buildSubjectProgressList(),
-                  ],
+                SizedBox(width: screenSize.width * 0.02),
+                const VerticalDivider(thickness: 1),
+                SizedBox(width: screenSize.width * 0.02),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildMoreDetailHeader(),
+                      SizedBox(height: screenSize.height * 0.03),
+                      _buildSubjectProgressList(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
