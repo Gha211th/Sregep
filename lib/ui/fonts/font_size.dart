@@ -41,9 +41,9 @@ class ResponsiveText {
   static double getFontSizeForStatsTitle(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    if (width >= 1600) return 42;
-    if (width >= 1200) return 40;
-    if (width >= 800) return 28;
+    if (width >= 1600) return 40;
+    if (width >= 1200) return 35;
+    if (width >= 800) return 25;
     if (width >= 480) return 24;
     return 20;
   }

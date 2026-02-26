@@ -24,7 +24,7 @@ class _StatsScreenState extends State<StatsScreen> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            if (constraints.maxWidth > 1000) {
+            if (constraints.maxWidth > 900) {
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: _buildDesktopMode(context),
